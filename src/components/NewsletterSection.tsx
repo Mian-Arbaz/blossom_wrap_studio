@@ -117,7 +117,7 @@ const NewsletterSection: React.FC = () => {
           </div>
 
           {/* Newsletter Form */}
-          <form onSubmit={handleSubmit} className="max-w-md mx-auto">
+          <form onSubmit={handleSubmit} className="max-w-lg mx-auto">
             <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
               <div className="flex-1 relative">
                 <input
@@ -126,15 +126,19 @@ const NewsletterSection: React.FC = () => {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Enter your email address"
                   disabled={isSubmitting || isSubscribed}
-                  className="w-full px-4 py-3 pl-12 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 text-dark-gray placeholder-gray-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full px-4 py-4 pl-12 rounded-full border-2 border-white border-opacity-30 bg-white bg-opacity-95 backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50 focus:border-white text-dark-gray placeholder-gray-600 font-medium shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:bg-opacity-100"
+                  style={{
+                    fontSize: '16px', // Prevents zoom on iOS
+                    lineHeight: '1.5'
+                  }}
                 />
-                <Mail size={20} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <Mail size={20} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" />
               </div>
               
               <button
                 type="submit"
                 disabled={isSubmitting || isSubscribed}
-                className="bg-dark-gray text-white px-8 py-3 rounded-full hover:bg-opacity-80 transition-all duration-300 font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed min-w-[140px]"
+                className="bg-dark-gray text-white px-8 py-4 rounded-full hover:bg-opacity-90 hover:shadow-lg transition-all duration-300 font-medium flex items-center justify-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed min-w-[160px] shadow-lg transform hover:scale-105"
               >
                 {isSubmitting ? (
                   <>
@@ -157,7 +161,7 @@ const NewsletterSection: React.FC = () => {
 
             {/* Success Message */}
             {isSubscribed && (
-              <div className="mt-4 p-4 bg-white bg-opacity-20 rounded-lg flex items-center justify-center space-x-2 text-dark-gray animate-fade-in">
+              <div className="mt-6 p-4 bg-white bg-opacity-90 rounded-lg flex items-center justify-center space-x-2 text-dark-gray animate-fade-in shadow-lg">
                 <CheckCircle size={20} className="text-green-600" />
                 <span className="font-medium">Welcome to our newsletter family! 🎉</span>
               </div>
@@ -165,25 +169,33 @@ const NewsletterSection: React.FC = () => {
           </form>
 
           {/* Benefits */}
-          <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
-            <div className="flex items-center justify-center space-x-2 text-dark-gray opacity-80">
-              <span className="w-2 h-2 bg-white rounded-full"></span>
-              <span>New Product Alerts</span>
+          <div className="mt-8 grid grid-cols-1 sm:grid-cols-3 gap-6 text-sm">
+            <div className="flex flex-col items-center space-y-2 text-dark-gray">
+              <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                <span className="text-lg">🔔</span>
+              </div>
+              <span className="font-medium">New Product Alerts</span>
             </div>
-            <div className="flex items-center justify-center space-x-2 text-dark-gray opacity-80">
-              <span className="w-2 h-2 bg-white rounded-full"></span>
-              <span>Exclusive Discounts</span>
+            <div className="flex flex-col items-center space-y-2 text-dark-gray">
+              <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                <span className="text-lg">💰</span>
+              </div>
+              <span className="font-medium">Exclusive Discounts</span>
             </div>
-            <div className="flex items-center justify-center space-x-2 text-dark-gray opacity-80">
-              <span className="w-2 h-2 bg-white rounded-full"></span>
-              <span>Early Access</span>
+            <div className="flex flex-col items-center space-y-2 text-dark-gray">
+              <div className="w-8 h-8 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                <span className="text-lg">⭐</span>
+              </div>
+              <span className="font-medium">Early Access</span>
             </div>
           </div>
 
           {/* Privacy Note */}
-          <p className="mt-6 text-xs text-dark-gray opacity-70">
-            We respect your privacy. Unsubscribe at any time. No spam, ever.
-          </p>
+          <div className="mt-8 p-4 bg-white bg-opacity-10 rounded-lg">
+            <p className="text-sm text-dark-gray opacity-80 leading-relaxed">
+              🔒 We respect your privacy. Unsubscribe at any time. No spam, ever.
+            </p>
+          </div>
         </div>
       </div>
     </section>
