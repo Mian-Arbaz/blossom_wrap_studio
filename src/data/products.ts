@@ -99,11 +99,11 @@ export const mockProducts: Product[] = [
     category: 'calligraphy',
     description: 'Personalized calligraphy artwork with your custom message. Perfect for home decoration.',
     price: 1500,
-    image: 'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: 'https://images.pexels.com/photos/6290/light-typography-black-close-up.jpg?auto=compress&cs=tinysrgb&w=400',
     images: [
-      'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=400',
-      'https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=400',
-      'https://images.pexels.com/photos/1591061/pexels-photo-1591061.jpeg?auto=compress&cs=tinysrgb&w=400'
+      'https://images.pexels.com/photos/6290/light-typography-black-close-up.jpg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/159519/back-to-school-paper-colored-paper-stationery-159519.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?auto=compress&cs=tinysrgb&w=400'
     ],
     tags: ['calligraphy', 'custom', 'art', 'personalized'],
     inventory: {
@@ -302,10 +302,10 @@ export const mockProducts: Product[] = [
     category: 'calligraphy',
     description: 'Beautiful personalized name art in elegant calligraphy style.',
     price: 1200,
-    image: 'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: 'https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?auto=compress&cs=tinysrgb&w=400',
     images: [
-      'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=400',
-      'https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=400'
+      'https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/6290/light-typography-black-close-up.jpg?auto=compress&cs=tinysrgb&w=400'
     ],
     tags: ['personalized', 'name', 'art', 'elegant'],
     inventory: {
@@ -343,10 +343,10 @@ export const mockProducts: Product[] = [
     category: 'calligraphy',
     description: 'Elegant wedding invitation calligraphy with beautiful flourishes and custom designs.',
     price: 2500,
-    image: 'https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: 'https://images.pexels.com/photos/159519/back-to-school-paper-colored-paper-stationery-159519.jpeg?auto=compress&cs=tinysrgb&w=400',
     images: [
-      'https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=400',
-      'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=400'
+      'https://images.pexels.com/photos/159519/back-to-school-paper-colored-paper-stationery-159519.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/6290/light-typography-black-close-up.jpg?auto=compress&cs=tinysrgb&w=400'
     ],
     tags: ['wedding', 'invitation', 'elegant', 'custom'],
     inventory: {
@@ -370,10 +370,10 @@ export const mockProducts: Product[] = [
     category: 'calligraphy',
     description: 'Beautiful inspirational quotes written in modern calligraphy style.',
     price: 1800,
-    image: 'https://images.pexels.com/photos/1591061/pexels-photo-1591061.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: 'https://images.pexels.com/photos/301703/pexels-photo-301703.jpeg?auto=compress&cs=tinysrgb&w=400',
     images: [
-      'https://images.pexels.com/photos/1591061/pexels-photo-1591061.jpeg?auto=compress&cs=tinysrgb&w=400',
-      'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=400'
+      'https://images.pexels.com/photos/301703/pexels-photo-301703.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/261763/pexels-photo-261763.jpeg?auto=compress&cs=tinysrgb&w=400'
     ],
     tags: ['inspirational', 'quote', 'modern', 'motivational'],
     inventory: {
@@ -397,10 +397,10 @@ export const mockProducts: Product[] = [
     category: 'calligraphy',
     description: 'Traditional Arabic calligraphy with beautiful Islamic verses and designs.',
     price: 2200,
-    image: 'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=400',
+    image: 'https://images.pexels.com/photos/207665/pexels-photo-207665.jpeg?auto=compress&cs=tinysrgb&w=400',
     images: [
-      'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=400',
-      'https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=400'
+      'https://images.pexels.com/photos/207665/pexels-photo-207665.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/6290/light-typography-black-close-up.jpg?auto=compress&cs=tinysrgb&w=400'
     ],
     tags: ['arabic', 'islamic', 'traditional', 'religious'],
     inventory: {
@@ -416,6 +416,60 @@ export const mockProducts: Product[] = [
       material: 'Handmade Paper',
       dimensions: 'A2 (42cm x 59.4cm)',
       color: 'Traditional Black'
+    }
+  },
+  {
+    id: '16',
+    name: 'Modern Calligraphy Workshop Kit',
+    category: 'calligraphy',
+    description: 'Complete kit for learning modern calligraphy with practice sheets and premium pens.',
+    price: 3500,
+    image: 'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=400',
+    images: [
+      'https://images.pexels.com/photos/1591447/pexels-photo-1591447.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/159519/back-to-school-paper-colored-paper-stationery-159519.jpeg?auto=compress&cs=tinysrgb&w=400'
+    ],
+    tags: ['workshop', 'kit', 'learning', 'modern'],
+    inventory: {
+      total: 25,
+      remaining: 18,
+      lowStockThreshold: 5
+    },
+    rating: {
+      average: 4.7,
+      count: 22
+    },
+    specifications: {
+      material: 'Mixed Materials',
+      dimensions: 'Kit Package',
+      color: 'Various'
+    }
+  },
+  {
+    id: '17',
+    name: 'Vintage Style Calligraphy',
+    category: 'calligraphy',
+    description: 'Classic vintage-style calligraphy perfect for antique-themed decorations.',
+    price: 2000,
+    image: 'https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=400',
+    images: [
+      'https://images.pexels.com/photos/1591056/pexels-photo-1591056.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/207665/pexels-photo-207665.jpeg?auto=compress&cs=tinysrgb&w=400'
+    ],
+    tags: ['vintage', 'classic', 'antique', 'traditional'],
+    inventory: {
+      total: 20,
+      remaining: 14,
+      lowStockThreshold: 5
+    },
+    rating: {
+      average: 4.4,
+      count: 11
+    },
+    specifications: {
+      material: 'Aged Paper',
+      dimensions: 'A4 (21cm x 29.7cm)',
+      color: 'Sepia Ink'
     }
   }
 ];
