@@ -5,21 +5,34 @@ export interface Product {
   description: string;
   price: number;
   image: string;
+  images?: string[]; // Multiple images support
   isUpcoming?: boolean;
+  isFeatured?: boolean;
+  tags?: string[];
   inventory?: {
     total: number;
     remaining: number;
     lowStockThreshold: number;
   };
+  rating?: {
+    average: number;
+    count: number;
+  };
+  specifications?: {
+    material?: string;
+    dimensions?: string;
+    weight?: string;
+    color?: string;
+  };
 }
 
 export const categories = [
-  { id: 'handmade-flowers', name: 'Handmade Flowers', icon: '🌸' },
-  { id: 'gift-packs', name: 'Gift Packs', icon: '🎁' },
-  { id: 'gift-packing', name: 'Gift Packing', icon: '📦' },
-  { id: 'calligraphy', name: 'Calligraphy', icon: '✍️' },
-  { id: 'birthday-gifts', name: 'Birthday Gifts', icon: '🎂' },
-  { id: 'couple-gifts', name: 'Couple Gifts', icon: '💕' }
+  { id: 'handmade-flowers', name: 'Handmade Flowers', icon: '🌸', description: 'Beautiful artificial flowers that last forever' },
+  { id: 'gift-packs', name: 'Gift Packs', icon: '🎁', description: 'Curated gift sets for special occasions' },
+  { id: 'gift-packing', name: 'Gift Packing', icon: '📦', description: 'Professional gift wrapping services' },
+  { id: 'calligraphy', name: 'Calligraphy', icon: '✍️', description: 'Custom calligraphy and artwork' },
+  { id: 'birthday-gifts', name: 'Birthday Gifts', icon: '🎂', description: 'Special birthday celebration items' },
+  { id: 'couple-gifts', name: 'Couple Gifts', icon: '💕', description: 'Romantic gifts for couples' }
 ];
 
 export const mockProducts: Product[] = [
@@ -30,10 +43,26 @@ export const mockProducts: Product[] = [
     description: 'Beautiful handcrafted rose bouquet perfect for any special occasion. Made with premium artificial roses that last forever.',
     price: 2500,
     image: 'https://images.pexels.com/photos/1128797/pexels-photo-1128797.jpeg?auto=compress&cs=tinysrgb&w=400',
+    images: [
+      'https://images.pexels.com/photos/1128797/pexels-photo-1128797.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/1350560/pexels-photo-1350560.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/931162/pexels-photo-931162.jpeg?auto=compress&cs=tinysrgb&w=400'
+    ],
+    isFeatured: true,
+    tags: ['roses', 'bouquet', 'romantic', 'wedding'],
     inventory: {
       total: 50,
       remaining: 35,
       lowStockThreshold: 10
+    },
+    rating: {
+      average: 4.8,
+      count: 24
+    },
+    specifications: {
+      material: 'Premium Silk',
+      dimensions: '30cm x 25cm',
+      color: 'Red & Pink'
     }
   },
   {
@@ -43,10 +72,25 @@ export const mockProducts: Product[] = [
     description: 'Luxurious gift box containing handmade items, perfect for gifting to loved ones.',
     price: 3500,
     image: 'https://images.pexels.com/photos/264985/pexels-photo-264985.jpeg?auto=compress&cs=tinysrgb&w=400',
+    images: [
+      'https://images.pexels.com/photos/264985/pexels-photo-264985.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/1666065/pexels-photo-1666065.jpeg?auto=compress&cs=tinysrgb&w=400'
+    ],
+    isFeatured: true,
+    tags: ['gift', 'luxury', 'premium', 'box'],
     inventory: {
       total: 30,
       remaining: 8,
       lowStockThreshold: 5
+    },
+    rating: {
+      average: 4.9,
+      count: 18
+    },
+    specifications: {
+      material: 'Cardboard & Silk',
+      dimensions: '25cm x 20cm x 10cm',
+      color: 'Gold & White'
     }
   },
   {
@@ -56,10 +100,24 @@ export const mockProducts: Product[] = [
     description: 'Personalized calligraphy artwork with your custom message. Perfect for home decoration.',
     price: 1500,
     image: 'https://images.pexels.com/photos/6290/light-typography-black-close-up.jpg?auto=compress&cs=tinysrgb&w=400',
+    images: [
+      'https://images.pexels.com/photos/6290/light-typography-black-close-up.jpg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/159519/back-to-school-paper-colored-paper-stationery-159519.jpeg?auto=compress&cs=tinysrgb&w=400'
+    ],
+    tags: ['calligraphy', 'custom', 'art', 'personalized'],
     inventory: {
       total: 25,
       remaining: 20,
       lowStockThreshold: 5
+    },
+    rating: {
+      average: 4.7,
+      count: 12
+    },
+    specifications: {
+      material: 'Premium Paper',
+      dimensions: 'A4 (21cm x 29.7cm)',
+      color: 'Black Ink'
     }
   },
   {
@@ -69,10 +127,25 @@ export const mockProducts: Product[] = [
     description: 'Special birthday package with handmade decorations and personalized items.',
     price: 4000,
     image: 'https://images.pexels.com/photos/1729931/pexels-photo-1729931.jpeg?auto=compress&cs=tinysrgb&w=400',
+    images: [
+      'https://images.pexels.com/photos/1729931/pexels-photo-1729931.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/1857157/pexels-photo-1857157.jpeg?auto=compress&cs=tinysrgb&w=400'
+    ],
+    isFeatured: true,
+    tags: ['birthday', 'celebration', 'party', 'decorations'],
     inventory: {
       total: 40,
       remaining: 25,
       lowStockThreshold: 8
+    },
+    rating: {
+      average: 4.6,
+      count: 31
+    },
+    specifications: {
+      material: 'Mixed Materials',
+      dimensions: 'Package Set',
+      color: 'Multicolor'
     }
   },
   {
@@ -82,10 +155,24 @@ export const mockProducts: Product[] = [
     description: 'Beautifully crafted memory book for couples with personalized touches.',
     price: 2800,
     image: 'https://images.pexels.com/photos/1444442/pexels-photo-1444442.jpeg?auto=compress&cs=tinysrgb&w=400',
+    images: [
+      'https://images.pexels.com/photos/1444442/pexels-photo-1444442.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/1029141/pexels-photo-1029141.jpeg?auto=compress&cs=tinysrgb&w=400'
+    ],
+    tags: ['couple', 'memory', 'book', 'romantic'],
     inventory: {
       total: 20,
       remaining: 15,
       lowStockThreshold: 5
+    },
+    rating: {
+      average: 4.9,
+      count: 15
+    },
+    specifications: {
+      material: 'Leather & Paper',
+      dimensions: '20cm x 25cm',
+      color: 'Brown Leather'
     }
   },
   {
@@ -95,10 +182,24 @@ export const mockProducts: Product[] = [
     description: 'Professional gift wrapping service with premium materials and elegant presentation.',
     price: 500,
     image: 'https://images.pexels.com/photos/264985/pexels-photo-264985.jpeg?auto=compress&cs=tinysrgb&w=400',
+    images: [
+      'https://images.pexels.com/photos/264985/pexels-photo-264985.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/1666065/pexels-photo-1666065.jpeg?auto=compress&cs=tinysrgb&w=400'
+    ],
+    tags: ['wrapping', 'service', 'luxury', 'presentation'],
     inventory: {
       total: 100,
       remaining: 85,
       lowStockThreshold: 20
+    },
+    rating: {
+      average: 4.5,
+      count: 42
+    },
+    specifications: {
+      material: 'Premium Wrapping Paper',
+      dimensions: 'Custom Size',
+      color: 'Various Options'
     }
   },
   {
@@ -108,11 +209,25 @@ export const mockProducts: Product[] = [
     description: 'Delicate sakura blossoms handcrafted with love. Perfect for spring decorations.',
     price: 2200,
     image: 'https://images.pexels.com/photos/1350560/pexels-photo-1350560.jpeg?auto=compress&cs=tinysrgb&w=400',
+    images: [
+      'https://images.pexels.com/photos/1350560/pexels-photo-1350560.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/931162/pexels-photo-931162.jpeg?auto=compress&cs=tinysrgb&w=400'
+    ],
     isUpcoming: true,
+    tags: ['sakura', 'spring', 'japanese', 'delicate'],
     inventory: {
       total: 15,
       remaining: 15,
       lowStockThreshold: 3
+    },
+    rating: {
+      average: 0,
+      count: 0
+    },
+    specifications: {
+      material: 'Silk & Wire',
+      dimensions: '35cm x 30cm',
+      color: 'Pink & White'
     }
   },
   {
@@ -122,11 +237,25 @@ export const mockProducts: Product[] = [
     description: 'Special anniversary gift box with handmade items and personalized messages.',
     price: 3800,
     image: 'https://images.pexels.com/photos/1444442/pexels-photo-1444442.jpeg?auto=compress&cs=tinysrgb&w=400',
+    images: [
+      'https://images.pexels.com/photos/1444442/pexels-photo-1444442.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/1029141/pexels-photo-1029141.jpeg?auto=compress&cs=tinysrgb&w=400'
+    ],
     isUpcoming: true,
+    tags: ['anniversary', 'special', 'romantic', 'personalized'],
     inventory: {
       total: 12,
       remaining: 12,
       lowStockThreshold: 3
+    },
+    rating: {
+      average: 0,
+      count: 0
+    },
+    specifications: {
+      material: 'Wood & Fabric',
+      dimensions: '30cm x 25cm x 15cm',
+      color: 'Natural Wood'
     }
   }
 ];
@@ -140,6 +269,11 @@ export const getProducts = (): Product[] => {
   return JSON.parse(localStorage.getItem('products') || '[]');
 };
 
+export const getFeaturedProducts = (): Product[] => {
+  const products = getProducts();
+  return products.filter(product => product.isFeatured && !product.isUpcoming);
+};
+
 export const getProductsByCategory = (category: string): Product[] => {
   const products = getProducts();
   return products.filter(product => product.category === category);
@@ -148,6 +282,18 @@ export const getProductsByCategory = (category: string): Product[] => {
 export const getProductById = (id: string): Product | undefined => {
   const products = getProducts();
   return products.find(product => product.id === id);
+};
+
+export const searchProducts = (query: string): Product[] => {
+  const products = getProducts();
+  const lowercaseQuery = query.toLowerCase();
+  
+  return products.filter(product =>
+    product.name.toLowerCase().includes(lowercaseQuery) ||
+    product.description.toLowerCase().includes(lowercaseQuery) ||
+    product.tags?.some(tag => tag.toLowerCase().includes(lowercaseQuery)) ||
+    categories.find(cat => cat.id === product.category)?.name.toLowerCase().includes(lowercaseQuery)
+  );
 };
 
 export const addProduct = (product: Omit<Product, 'id'>): Product => {
@@ -159,6 +305,10 @@ export const addProduct = (product: Omit<Product, 'id'>): Product => {
       total: 0,
       remaining: 0,
       lowStockThreshold: 5
+    },
+    rating: product.rating || {
+      average: 0,
+      count: 0
     }
   };
   products.push(newProduct);
@@ -225,4 +375,21 @@ export const updateInventory = (id: string, remaining: number): boolean => {
     return true;
   }
   return false;
+};
+
+export const getProductsByTag = (tag: string): Product[] => {
+  const products = getProducts();
+  return products.filter(product => 
+    product.tags?.some(productTag => 
+      productTag.toLowerCase().includes(tag.toLowerCase())
+    )
+  );
+};
+
+export const getTopRatedProducts = (limit: number = 4): Product[] => {
+  const products = getProducts();
+  return products
+    .filter(product => product.rating && product.rating.count > 0)
+    .sort((a, b) => (b.rating?.average || 0) - (a.rating?.average || 0))
+    .slice(0, limit);
 };

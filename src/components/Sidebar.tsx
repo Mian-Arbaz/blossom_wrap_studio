@@ -10,7 +10,7 @@ const Sidebar: React.FC = () => {
     <>
       {/* Desktop Sidebar */}
       <aside className="hidden lg:block fixed left-0 top-20 bottom-0 w-64 bg-white shadow-lg z-40 transition-all duration-300 hover:bg-opacity-95 overflow-y-auto">
-        <div className="p-6 pb-20">
+        <div className="p-6 pb-32"> {/* Added extra bottom padding */}
           <Link
             to="/"
             className="flex items-center space-x-3 text-dark-gray hover:text-light-pink transition-colors duration-300 mb-6 p-3 rounded-lg hover:bg-light-pink hover:bg-opacity-20"
@@ -41,7 +41,7 @@ const Sidebar: React.FC = () => {
         </div>
       </aside>
 
-      {/* Mobile Sidebar Toggle Button - Changed from Menu to Home icon */}
+      {/* Mobile Sidebar Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="lg:hidden fixed bottom-6 left-6 z-50 bg-light-pink text-dark-gray p-4 rounded-full shadow-lg hover:bg-opacity-80 transition-all duration-300 hover:scale-110 active:scale-95"
@@ -58,7 +58,7 @@ const Sidebar: React.FC = () => {
             onClick={() => setIsOpen(false)} 
           />
           <aside className="absolute left-0 top-0 bottom-0 w-80 max-w-[85vw] bg-white shadow-xl transform transition-transform duration-300 ease-out overflow-y-auto">
-            <div className="p-6 pb-20">
+            <div className="p-6 pb-32"> {/* Added extra bottom padding */}
               {/* Mobile Header */}
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
                 <div className="flex items-center space-x-3">
