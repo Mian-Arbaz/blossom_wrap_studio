@@ -1,12 +1,43 @@
 import React from 'react';
-import { Heart, Facebook, Instagram, Twitter, Mail, Phone, MapPin } from 'lucide-react';
+import { Heart, Facebook, Instagram, Twitter, Mail, Phone, MapPin, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-50 border-t border-gray-200 mt-20 relative z-30">
       <div className="container mx-auto px-4 py-8 lg:ml-64">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {/* Business Hours - Top Section */}
+        <div className="bg-gradient-to-r from-light-pink to-light-blue rounded-lg p-4 mb-8">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="flex items-center space-x-3 mb-4 md:mb-0">
+              <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
+                <Clock size={20} className="text-dark-gray" />
+              </div>
+              <div>
+                <h3 className="font-lora font-bold text-dark-gray">Business Hours</h3>
+                <p className="text-sm text-dark-gray opacity-80">We're here to help you</p>
+              </div>
+            </div>
+            
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+              <div className="bg-white bg-opacity-20 rounded-lg p-3">
+                <p className="text-xs text-dark-gray font-medium">Monday - Friday</p>
+                <p className="text-sm font-bold text-dark-gray">9:00 AM - 8:00 PM</p>
+              </div>
+              <div className="bg-white bg-opacity-20 rounded-lg p-3">
+                <p className="text-xs text-dark-gray font-medium">Saturday</p>
+                <p className="text-sm font-bold text-dark-gray">10:00 AM - 6:00 PM</p>
+              </div>
+              <div className="bg-white bg-opacity-20 rounded-lg p-3">
+                <p className="text-xs text-dark-gray font-medium">Sunday</p>
+                <p className="text-sm font-bold text-red-600">Closed</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Footer Content */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
           {/* Company Info */}
           <div>
             <div className="flex items-center space-x-3 mb-4">
@@ -25,15 +56,15 @@ const Footer: React.FC = () => {
             {/* Contact Info */}
             <div className="space-y-2 mb-4">
               <div className="flex items-center space-x-2 text-gray-600 text-sm">
-                <MapPin size={14} className="text-light-pink" />
+                <MapPin size={14} className="text-light-pink flex-shrink-0" />
                 <span>Lahore, Pakistan</span>
               </div>
               <div className="flex items-center space-x-2 text-gray-600 text-sm">
-                <Phone size={14} className="text-light-pink" />
+                <Phone size={14} className="text-light-pink flex-shrink-0" />
                 <span>+92 300 1234567</span>
               </div>
               <div className="flex items-center space-x-2 text-gray-600 text-sm">
-                <Mail size={14} className="text-light-pink" />
+                <Mail size={14} className="text-light-pink flex-shrink-0" />
                 <span>info@blossomwrap.com</span>
               </div>
             </div>
@@ -96,10 +127,10 @@ const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Categories & Business Hours */}
+          {/* Categories */}
           <div>
             <h4 className="font-lora font-semibold text-dark-gray mb-4">Categories</h4>
-            <ul className="space-y-2 mb-6">
+            <ul className="space-y-2">
               <li>
                 <Link to="/products/calligraphy" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm">
                   Calligraphy
@@ -121,46 +152,44 @@ const Footer: React.FC = () => {
                 </Link>
               </li>
             </ul>
-
-            {/* Business Hours - Compact */}
-            <div className="bg-white rounded-lg p-3 border border-gray-200">
-              <h5 className="font-semibold text-dark-gray mb-2 text-sm">Business Hours</h5>
-              <div className="space-y-1 text-xs">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Mon - Fri</span>
-                  <span className="text-dark-gray font-medium">9AM - 8PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Saturday</span>
-                  <span className="text-dark-gray font-medium">10AM - 6PM</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Sunday</span>
-                  <span className="text-red-500 font-medium">Closed</span>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
 
-        {/* Bottom Section - Compact */}
-        <div className="border-t border-gray-200 mt-6 pt-4">
-          <div className="flex flex-col md:flex-row items-center justify-between space-y-2 md:space-y-0">
-            <p className="text-gray-600 flex items-center space-x-1 text-sm">
+        {/* Bottom Section - Copyright & Legal Links */}
+        <div className="border-t border-gray-200 pt-6">
+          <div className="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
+            {/* Copyright */}
+            <div className="flex items-center justify-center lg:justify-start space-x-1 text-sm text-gray-600">
               <span>Made with</span>
               <Heart size={14} className="text-light-pink fill-current" />
               <span>by Blossom Wrap Studio © 2024</span>
-            </p>
+            </div>
             
-            <div className="flex items-center space-x-4 text-xs text-gray-600">
-              <Link to="/privacy" className="hover:text-light-pink transition-colors duration-300">
-                Privacy
+            {/* Legal Links */}
+            <div className="flex flex-wrap items-center justify-center space-x-6 text-sm text-gray-600">
+              <Link 
+                to="/privacy" 
+                className="hover:text-light-pink transition-colors duration-300 hover:underline"
+              >
+                Privacy Policy
               </Link>
-              <Link to="/terms" className="hover:text-light-pink transition-colors duration-300">
-                Terms
+              <Link 
+                to="/terms" 
+                className="hover:text-light-pink transition-colors duration-300 hover:underline"
+              >
+                Terms of Service
               </Link>
-              <Link to="/shipping" className="hover:text-light-pink transition-colors duration-300">
-                Shipping
+              <Link 
+                to="/shipping" 
+                className="hover:text-light-pink transition-colors duration-300 hover:underline"
+              >
+                Shipping Info
+              </Link>
+              <Link 
+                to="/returns" 
+                className="hover:text-light-pink transition-colors duration-300 hover:underline"
+              >
+                Returns
               </Link>
             </div>
           </div>
