@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Heart, Share2, MessageCircle, Star } from 'lucide-react';
+import { ArrowLeft, Heart, Share2, MessageCircle, Star, ShoppingBag, Plus, Minus } from 'lucide-react';
 import { getProductById, getProductsByCategory } from '../data/products';
+import { useCart } from '../contexts/CartContext';
+import { useNotification } from '../contexts/NotificationContext';
 import ProductCard from '../components/ProductCard';
+import ImageGallery from '../components/ImageGallery';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const ProductDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [product, setProduct] = useState<any>(null);
   const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
-  const [selectedImage, setSelectedImage] = useState(0);
-  const [isLiked, setIsLiked] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const { addToCart, addToWishlist, removeFromWishlist, isInWishlist } = useCart();
+  const { addNotification } = useNotification();
+
+  const isWishlisted = product ? isInWishlist(product.id) : false;
 
   useEffect(() => {
     if (id) {
@@ -25,13 +33,72 @@ const ProductDetailPage: React.FC = () => {
     }
   }, [id]);
 
+  const handleAddToCart = async () => {
+    if (!product) return;
+    
+    if (product.isUpcoming) {
+      addNotification({
+        type: 'warning',
+        title: 'Product Coming Soon',
+        message: 'This product is not available yet. We\'ll notify you when it\'s ready!'
+      });
+      return;
+    }
+
+    if (product.inventory?.remaining === 0) {
+      addNotification({
+        type: 'error',
+        title: 'Out of Stock',
+        message: 'This product is currently out of stock.'
+      });
+      return;
+    }
+
+    setIsAddingToCart(true);
+    
+    // Simulate API call delay
+    setTimeout(() => {
+      addToCart(product, quantity);
+      setIsAddingToCart(false);
+      addNotification({
+        type: 'success',
+        title: 'Added to Cart!',
+        message: `${quantity} x ${product.name} added to your cart.`
+      });
+    }, 500);
+  };
+
+  const handleWishlistToggle = () => {
+    if (!product) return;
+    
+    if (isWishlisted) {
+      removeFromWishlist(product.id);
+      addNotification({
+        type: 'info',
+        title: 'Removed from Wishlist',
+        message: `${product.name} has been removed from your wishlist.`
+      });
+    } else {
+      addToWishlist(product);
+      addNotification({
+        type: 'success',
+        title: 'Added to Wishlist!',
+        message: `${product.name} has been added to your wishlist.`
+      });
+    }
+  };
+
   const handleWhatsAppContact = () => {
+    if (!product) return;
+    
     const message = `Hi! I'm interested in ${product.name} from Blossom Wrap Studio. Can you provide more details?`;
     const whatsappUrl = `https://wa.me/+923001234567?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
 
   const handleShare = async () => {
+    if (!product) return;
+    
     if (navigator.share) {
       try {
         await navigator.share({
@@ -44,25 +111,47 @@ const ProductDetailPage: React.FC = () => {
       }
     } else {
       // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href);
-      alert('Link copied to clipboard!');
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        addNotification({
+          type: 'success',
+          title: 'Link Copied!',
+          message: 'Product link has been copied to clipboard.'
+        });
+      } catch (error) {
+        addNotification({
+          type: 'error',
+          title: 'Share Failed',
+          message: 'Unable to share this product.'
+        });
+      }
     }
+  };
+
+  const getStockStatus = () => {
+    if (!product?.inventory) return null;
+    
+    const { remaining, lowStockThreshold } = product.inventory;
+    
+    if (remaining === 0) return { text: 'Out of Stock', color: 'text-red-600' };
+    if (remaining <= lowStockThreshold) return { text: 'Low Stock', color: 'text-yellow-600' };
+    return { text: 'In Stock', color: 'text-green-600' };
   };
 
   if (!product) {
     return (
       <div className="lg:ml-64 min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-dark-gray mb-4">Product not found</h2>
-          <Link to="/" className="text-light-pink hover:underline">
-            Return to Home
-          </Link>
+          <LoadingSpinner size="lg" />
+          <p className="mt-4 text-gray-600">Loading product...</p>
         </div>
       </div>
     );
   }
 
   const productImages = [product.image, product.image, product.image]; // Mock multiple images
+  const stockStatus = getStockStatus();
+  const maxQuantity = product.inventory?.remaining || 1;
 
   return (
     <div className="lg:ml-64 min-h-screen">
@@ -84,31 +173,8 @@ const ProductDetailPage: React.FC = () => {
         <div className="container mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Image Gallery */}
-            <div className="space-y-4">
-              <div className="aspect-square bg-gray-100 rounded-lg overflow-hidden">
-                <img
-                  src={productImages[selectedImage]}
-                  alt={product.name}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="flex space-x-2">
-                {productImages.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`w-20 h-20 rounded-lg overflow-hidden border-2 ${
-                      selectedImage === index ? 'border-light-pink' : 'border-gray-200'
-                    }`}
-                  >
-                    <img
-                      src={image}
-                      alt={`${product.name} ${index + 1}`}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
+            <div>
+              <ImageGallery images={productImages} productName={product.name} />
             </div>
 
             {/* Product Info */}
@@ -131,12 +197,42 @@ const ProductDetailPage: React.FC = () => {
                     <span className="text-gray-600 ml-2">(4.8)</span>
                   </div>
                   <span className="text-gray-400">|</span>
-                  <span className="text-gray-600">In Stock</span>
+                  {stockStatus && (
+                    <span className={`font-medium ${stockStatus.color}`}>
+                      {stockStatus.text}
+                    </span>
+                  )}
                 </div>
                 <p className="text-3xl font-bold text-dark-gray mb-6">
                   PKR {product.price.toLocaleString()}
                 </p>
               </div>
+
+              {/* Stock Information */}
+              {product.inventory && (
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-sm text-gray-600">Stock Level</span>
+                    <span className="text-sm font-medium text-dark-gray">
+                      {product.inventory.remaining} / {product.inventory.total}
+                    </span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className={`h-2 rounded-full ${
+                        product.inventory.remaining > product.inventory.lowStockThreshold
+                          ? 'bg-green-500'
+                          : product.inventory.remaining > 0
+                          ? 'bg-yellow-500'
+                          : 'bg-red-500'
+                      }`}
+                      style={{
+                        width: `${(product.inventory.remaining / product.inventory.total) * 100}%`
+                      }}
+                    ></div>
+                  </div>
+                </div>
+              )}
 
               <div>
                 <h3 className="font-lora text-xl font-semibold text-dark-gray mb-3">Description</h3>
@@ -167,7 +263,73 @@ const ProductDetailPage: React.FC = () => {
                 </ul>
               </div>
 
+              {/* Quantity Selector */}
+              {!product.isUpcoming && product.inventory?.remaining > 0 && (
+                <div className="space-y-4">
+                  <h3 className="font-lora text-lg font-semibold text-dark-gray">Quantity</h3>
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center border border-gray-300 rounded-lg">
+                      <button
+                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                        className="p-2 hover:bg-gray-100 transition-colors duration-200"
+                        disabled={quantity <= 1}
+                      >
+                        <Minus size={16} />
+                      </button>
+                      <span className="px-4 py-2 font-medium">{quantity}</span>
+                      <button
+                        onClick={() => setQuantity(Math.min(maxQuantity, quantity + 1))}
+                        className="p-2 hover:bg-gray-100 transition-colors duration-200"
+                        disabled={quantity >= maxQuantity}
+                      >
+                        <Plus size={16} />
+                      </button>
+                    </div>
+                    <span className="text-sm text-gray-600">
+                      {maxQuantity} available
+                    </span>
+                  </div>
+                </div>
+              )}
+
               {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                <button
+                  onClick={handleAddToCart}
+                  disabled={isAddingToCart || product.isUpcoming || product.inventory?.remaining === 0}
+                  className="flex-1 bg-light-pink text-dark-gray px-6 py-3 rounded-full hover:bg-opacity-80 transition-all duration-300 flex items-center justify-center space-x-2 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isAddingToCart ? (
+                    <LoadingSpinner size="sm" color="border-dark-gray" />
+                  ) : (
+                    <>
+                      <ShoppingBag size={20} />
+                      <span>
+                        {product.isUpcoming 
+                          ? 'Coming Soon' 
+                          : product.inventory?.remaining === 0 
+                          ? 'Out of Stock' 
+                          : 'Add to Cart'
+                        }
+                      </span>
+                    </>
+                  )}
+                </button>
+                
+                <button
+                  onClick={handleWishlistToggle}
+                  className={`px-6 py-3 rounded-full border-2 transition-all duration-300 flex items-center justify-center space-x-2 ${
+                    isWishlisted
+                      ? 'border-red-500 text-red-500 bg-red-50'
+                      : 'border-gray-300 text-gray-600 hover:border-light-pink hover:text-light-pink'
+                  }`}
+                >
+                  <Heart size={20} className={isWishlisted ? 'fill-current' : ''} />
+                  <span>{isWishlisted ? 'Wishlisted' : 'Add to Wishlist'}</span>
+                </button>
+              </div>
+
+              {/* Secondary Actions */}
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
                 <button
                   onClick={handleWhatsAppContact}
@@ -176,17 +338,7 @@ const ProductDetailPage: React.FC = () => {
                   <MessageCircle size={20} />
                   <span>Contact on WhatsApp</span>
                 </button>
-                <button
-                  onClick={() => setIsLiked(!isLiked)}
-                  className={`px-6 py-3 rounded-full border-2 transition-all duration-300 flex items-center justify-center space-x-2 ${
-                    isLiked
-                      ? 'border-red-500 text-red-500 bg-red-50'
-                      : 'border-gray-300 text-gray-600 hover:border-light-pink hover:text-light-pink'
-                  }`}
-                >
-                  <Heart size={20} className={isLiked ? 'fill-current' : ''} />
-                  <span>{isLiked ? 'Liked' : 'Like'}</span>
-                </button>
+                
                 <button
                   onClick={handleShare}
                   className="px-6 py-3 rounded-full border-2 border-gray-300 text-gray-600 hover:border-light-pink hover:text-light-pink transition-all duration-300 flex items-center justify-center space-x-2"

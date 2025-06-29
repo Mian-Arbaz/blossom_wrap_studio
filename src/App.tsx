@@ -1,10 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
+import { CartProvider } from './contexts/CartContext';
+import { NotificationProvider } from './contexts/NotificationContext';
 import Header from './components/Header';
 import Sidebar from './components/Sidebar';
 import WhatsAppButton from './components/WhatsAppButton';
 import Footer from './components/Footer';
+import NotificationToast from './components/NotificationToast';
 import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
@@ -13,30 +16,37 @@ import RegisterPage from './pages/RegisterPage';
 import ContactPage from './pages/ContactPage';
 import AdminPage from './pages/AdminPage';
 import UpcomingProductsPage from './pages/UpcomingProductsPage';
+import WishlistPage from './pages/WishlistPage';
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <div className="min-h-screen bg-white font-poppins">
-          <Header />
-          <Sidebar />
-          <main className="transition-all duration-300">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/products/:category" element={<ProductsPage />} />
-              <Route path="/product/:id" element={<ProductDetailPage />} />
-              <Route path="/login" element={<LoginPage />} />
-              <Route path="/register" element={<RegisterPage />} />
-              <Route path="/contact" element={<ContactPage />} />
-              <Route path="/admin" element={<AdminPage />} />
-              <Route path="/upcoming" element={<UpcomingProductsPage />} />
-            </Routes>
-          </main>
-          <Footer />
-          <WhatsAppButton />
-        </div>
-      </Router>
+      <CartProvider>
+        <NotificationProvider>
+          <Router>
+            <div className="min-h-screen bg-white font-poppins">
+              <Header />
+              <Sidebar />
+              <main className="transition-all duration-300">
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/products/:category" element={<ProductsPage />} />
+                  <Route path="/product/:id" element={<ProductDetailPage />} />
+                  <Route path="/login" element={<LoginPage />} />
+                  <Route path="/register" element={<RegisterPage />} />
+                  <Route path="/contact" element={<ContactPage />} />
+                  <Route path="/admin" element={<AdminPage />} />
+                  <Route path="/upcoming" element={<UpcomingProductsPage />} />
+                  <Route path="/wishlist" element={<WishlistPage />} />
+                </Routes>
+              </main>
+              <Footer />
+              <WhatsAppButton />
+              <NotificationToast />
+            </div>
+          </Router>
+        </NotificationProvider>
+      </CartProvider>
     </AuthProvider>
   );
 }
