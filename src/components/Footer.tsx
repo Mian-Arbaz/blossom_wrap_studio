@@ -7,29 +7,31 @@ const Footer: React.FC = () => {
     <footer className="bg-gray-50 border-t border-gray-200 mt-20 relative z-30">
       <div className="container mx-auto px-4 py-8 lg:ml-64">
         {/* Business Hours - Top Section */}
-        <div className="bg-gradient-to-r from-light-pink to-light-blue rounded-lg p-4 mb-8">
-          <div className="flex flex-col md:flex-row items-center justify-between">
-            <div className="flex items-center space-x-3 mb-4 md:mb-0">
-              <div className="w-10 h-10 bg-white bg-opacity-20 rounded-full flex items-center justify-center">
-                <Clock size={20} className="text-dark-gray" />
+        <div className="bg-gradient-to-r from-light-pink to-light-blue rounded-lg p-6 mb-8 max-w-5xl mx-auto">
+          <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+            {/* Header */}
+            <div className="flex items-center space-x-3 text-center lg:text-left">
+              <div className="w-12 h-12 bg-white bg-opacity-20 rounded-full flex items-center justify-center flex-shrink-0">
+                <Clock size={24} className="text-dark-gray" />
               </div>
               <div>
-                <h3 className="font-lora font-bold text-dark-gray">Business Hours</h3>
+                <h3 className="font-lora font-bold text-dark-gray text-lg">Business Hours</h3>
                 <p className="text-sm text-dark-gray opacity-80">We're here to help you</p>
               </div>
             </div>
             
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
-              <div className="bg-white bg-opacity-20 rounded-lg p-3">
-                <p className="text-xs text-dark-gray font-medium">Monday - Friday</p>
+            {/* Hours Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full lg:w-auto lg:min-w-[400px]">
+              <div className="bg-white bg-opacity-20 rounded-lg p-4 text-center min-w-[120px]">
+                <p className="text-xs text-dark-gray font-medium mb-1">Monday - Friday</p>
                 <p className="text-sm font-bold text-dark-gray">9:00 AM - 8:00 PM</p>
               </div>
-              <div className="bg-white bg-opacity-20 rounded-lg p-3">
-                <p className="text-xs text-dark-gray font-medium">Saturday</p>
+              <div className="bg-white bg-opacity-20 rounded-lg p-4 text-center min-w-[120px]">
+                <p className="text-xs text-dark-gray font-medium mb-1">Saturday</p>
                 <p className="text-sm font-bold text-dark-gray">10:00 AM - 6:00 PM</p>
               </div>
-              <div className="bg-white bg-opacity-20 rounded-lg p-3">
-                <p className="text-xs text-dark-gray font-medium">Sunday</p>
+              <div className="bg-white bg-opacity-20 rounded-lg p-4 text-center min-w-[120px]">
+                <p className="text-xs text-dark-gray font-medium mb-1">Sunday</p>
                 <p className="text-sm font-bold text-red-600">Closed</p>
               </div>
             </div>
@@ -37,7 +39,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6 max-w-6xl mx-auto">
           {/* Company Info */}
           <div>
             <div className="flex items-center space-x-3 mb-4">
@@ -49,7 +51,7 @@ const Footer: React.FC = () => {
                 <p className="text-xs text-gray-600">Makes You Smile</p>
               </div>
             </div>
-            <p className="text-gray-600 text-sm mb-4">
+            <p className="text-gray-600 text-sm mb-4 leading-relaxed">
               Creating beautiful handmade gifts and decorations that bring joy to your special moments.
             </p>
             
@@ -156,7 +158,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Section - Copyright & Legal Links */}
-        <div className="border-t border-gray-200 pt-6">
+        <div className="border-t border-gray-200 pt-6 max-w-6xl mx-auto">
           <div className="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
             {/* Copyright */}
             <div className="flex items-center justify-center lg:justify-start space-x-1 text-sm text-gray-600">
@@ -166,28 +168,28 @@ const Footer: React.FC = () => {
             </div>
             
             {/* Legal Links */}
-            <div className="flex flex-wrap items-center justify-center space-x-6 text-sm text-gray-600">
+            <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-6 text-sm text-gray-600">
               <Link 
                 to="/privacy" 
-                className="hover:text-light-pink transition-colors duration-300 hover:underline"
+                className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
               >
                 Privacy Policy
               </Link>
               <Link 
                 to="/terms" 
-                className="hover:text-light-pink transition-colors duration-300 hover:underline"
+                className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
               >
                 Terms of Service
               </Link>
               <Link 
                 to="/shipping" 
-                className="hover:text-light-pink transition-colors duration-300 hover:underline"
+                className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
               >
                 Shipping Info
               </Link>
               <Link 
                 to="/returns" 
-                className="hover:text-light-pink transition-colors duration-300 hover:underline"
+                className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
               >
                 Returns
               </Link>
