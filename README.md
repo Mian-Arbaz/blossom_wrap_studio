@@ -6,10 +6,9 @@ A comprehensive e-commerce platform for handmade gifts, flowers, and decorations
 
 ## 🌐 Live Demo
 
-**Website:** https://ornate-fenglisu-04b7f6.netlify.app
+**Website:** https://blossom-wrap-studio.netlify.app
 
-[![Netlify Status](https://api.netlify.com/api/v1/badges/1b2cf818-a43c-4484-9468-de67d28a0560/deploy-status)](https://app.netlify.com/projects/ornate-fenglisu-04b7f6/deploys)
-
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1b2cf818-a43c-4484-9468-de67d28a0560/deploy-status)](https://app.netlify.com/projects/blossom-wrap-studio/deploys)
 ## 📋 Table of Contents
 
 - [Features](#features)
