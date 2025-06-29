@@ -287,4 +287,5 @@ For support and inquiries:
 
 **Made with ❤️ by Blossom Wrap Studio**
 
-*This project showcases a modern, responsive e-commerce website built with React and TypeScript, featuring a beautiful design system and comprehensive admin functionality.*
+*This project showcases a modern, responsive e-commerce website built with React and TypeScript, featuring a beautiful design system and comprehensive admin functionality.* 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/1b2cf818-a43c-4484-9468-de67d28a0560/deploy-status)](https://app.netlify.com/projects/ornate-fenglisu-04b7f6/deploys)
