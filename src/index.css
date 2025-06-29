@@ -70,6 +70,50 @@ footer {
   margin-top: auto;
 }
 
+/* Image optimization and loading states */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Prevent layout shift during image loading */
+.image-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.image-container::before {
+  content: '';
+  display: block;
+  width: 100%;
+  height: 0;
+  padding-bottom: 75%; /* 4:3 aspect ratio */
+}
+
+.image-container img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Lazy loading animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
 /* Loading animation */
 @keyframes shimmer {
   0% {
@@ -84,6 +128,53 @@ footer {
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200px 100%;
   animation: shimmer 1.5s infinite;
+}
+
+/* Skeleton loading for images */
+.skeleton {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Image blur-up effect */
+.blur-up {
+  filter: blur(5px);
+  transition: filter 0.3s ease;
+}
+
+.blur-up.loaded {
+  filter: blur(0);
+}
+
+/* Progressive image enhancement */
+.progressive-image {
+  position: relative;
+  overflow: hidden;
+}
+
+.progressive-image .placeholder {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(2px);
+  transform: scale(1.1);
+  transition: opacity 0.3s ease;
+}
+
+.progressive-image .main-image {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.progressive-image .main-image.loaded {
+  opacity: 1;
+}
+
+.progressive-image .main-image.loaded + .placeholder {
+  opacity: 0;
 }
 
 /* Container consistency across all pages */
@@ -177,6 +268,12 @@ footer {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+  
+  /* Disable image transitions for reduced motion */
+  .progressive-image .main-image,
+  .progressive-image .placeholder {
+    transition: none !important;
   }
 }
 
@@ -308,13 +405,6 @@ ul, ol {
   margin: 0;
 }
 
-/* Image optimization */
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
 /* Accessibility improvements */
 .sr-only {
   position: absolute;
@@ -342,4 +432,39 @@ img {
 
 .skip-link:focus {
   top: 6px;
+}
+
+/* Performance optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+/* GPU acceleration for smooth animations */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Optimize font rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Optimize image rendering */
+img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+}
+
+/* Critical resource hints */
+.preload-hint {
+  content-visibility: auto;
+  contain-intrinsic-size: 300px;
 }

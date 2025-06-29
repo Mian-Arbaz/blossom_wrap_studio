@@ -152,7 +152,7 @@ const HomePage: React.FC = () => {
                 className="animate-slide-up"
                 style={{ animationDelay: `${index * 150}ms` }}
               >
-                <ProductCard product={product} />
+                <ProductCard product={product} priority={index < 2} />
               </div>
             ))}
           </div>

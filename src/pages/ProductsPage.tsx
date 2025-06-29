@@ -148,14 +148,17 @@ const ProductsPage: React.FC = () => {
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   {viewMode === 'grid' ? (
-                    <ProductCard product={product} />
+                    <ProductCard product={product} priority={index < 4} />
                   ) : (
                     <div className="bg-white rounded-lg shadow-md overflow-hidden flex">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-48 h-32 object-cover"
-                      />
+                      <div className="w-48 h-32 flex-shrink-0">
+                        <img
+                          src={product.image}
+                          alt={product.name}
+                          className="w-full h-full object-cover"
+                          loading={index < 4 ? 'eager' : 'lazy'}
+                        />
+                      </div>
                       <div className="flex-1 p-4">
                         <h3 className="font-lora text-xl font-semibold text-dark-gray mb-2">
                           {product.name}
