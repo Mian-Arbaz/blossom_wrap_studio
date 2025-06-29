@@ -4,7 +4,7 @@ import {
   Package, Users, MessageSquare, Plus, Edit, Trash2, 
   Eye, EyeOff, Save, X, Upload, Clock, Star, 
   TrendingDown, AlertTriangle, BarChart3, ShoppingCart,
-  Minus, PlusIcon
+  Minus, PlusIcon, Mail
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { 
@@ -15,10 +15,11 @@ import {
 const AdminPage: React.FC = () => {
   const { isAdmin, user } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'products' | 'users' | 'messages' | 'inventory'>('products');
+  const [activeTab, setActiveTab] = useState<'products' | 'users' | 'messages' | 'inventory' | 'newsletter'>('products');
   const [products, setProducts] = useState<Product[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
+  const [subscribers, setSubscribers] = useState<any[]>([]);
   const [inventoryStats, setInventoryStats] = useState<any>({});
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -31,6 +32,8 @@ const AdminPage: React.FC = () => {
     price: 0,
     image: '',
     isUpcoming: false,
+    isFeatured: false,
+    tags: '',
     inventory: {
       total: 0,
       remaining: 0,
@@ -49,6 +52,7 @@ const AdminPage: React.FC = () => {
     setProducts(loadedProducts);
     setUsers(JSON.parse(localStorage.getItem('users') || '[]'));
     setMessages(JSON.parse(localStorage.getItem('contactMessages') || '[]'));
+    setSubscribers(JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]'));
     setInventoryStats(getInventoryStats());
   }, [isAdmin, navigate]);
 
@@ -62,6 +66,8 @@ const AdminPage: React.FC = () => {
       price: 0,
       image: '',
       isUpcoming: false,
+      isFeatured: false,
+      tags: '',
       inventory: {
         total: 0,
         remaining: 0,
@@ -81,6 +87,8 @@ const AdminPage: React.FC = () => {
       price: product.price,
       image: product.image,
       isUpcoming: product.isUpcoming || false,
+      isFeatured: product.isFeatured || false,
+      tags: product.tags?.join(', ') || '',
       inventory: product.inventory || {
         total: 0,
         remaining: 0,
@@ -96,10 +104,15 @@ const AdminPage: React.FC = () => {
       return;
     }
 
+    const productData = {
+      ...productForm,
+      tags: productForm.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
+    };
+
     if (isAddingProduct) {
-      addProduct(productForm);
+      addProduct(productData);
     } else if (editingProduct) {
-      updateProduct(editingProduct.id, productForm);
+      updateProduct(editingProduct.id, productData);
     }
 
     const updatedProducts = getProducts();
@@ -160,6 +173,7 @@ const AdminPage: React.FC = () => {
     upcomingProducts: products.filter(p => p.isUpcoming).length,
     totalUsers: users.length,
     totalMessages: messages.length,
+    totalSubscribers: subscribers.length,
     ...inventoryStats
   };
 
@@ -184,7 +198,7 @@ const AdminPage: React.FC = () => {
 
       {/* Stats Cards */}
       <div className="p-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
@@ -232,6 +246,18 @@ const AdminPage: React.FC = () => {
               </div>
             </div>
           </div>
+
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Newsletter Subscribers</p>
+                <p className="text-2xl font-bold text-purple-600">{stats.totalSubscribers}</p>
+              </div>
+              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
+                <Mail size={24} className="text-purple-600" />
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Tabs */}
@@ -242,7 +268,8 @@ const AdminPage: React.FC = () => {
                 { id: 'products', label: 'Products', icon: Package },
                 { id: 'inventory', label: 'Inventory', icon: BarChart3 },
                 { id: 'users', label: 'Users', icon: Users },
-                { id: 'messages', label: 'Messages', icon: MessageSquare }
+                { id: 'messages', label: 'Messages', icon: MessageSquare },
+                { id: 'newsletter', label: 'Newsletter', icon: Mail }
               ].map(({ id, label, icon: Icon }) => (
                 <button
                   key={id}
@@ -346,6 +373,11 @@ const AdminPage: React.FC = () => {
                                     {stockStatus.status}
                                   </span>
                                 )}
+                                {product.isFeatured && (
+                                  <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-full text-xs font-medium block">
+                                    Featured
+                                  </span>
+                                )}
                               </div>
                             </td>
                             <td className="px-4 py-3">
@@ -370,6 +402,61 @@ const AdminPage: React.FC = () => {
                     </tbody>
                   </table>
                 </div>
+              </div>
+            )}
+
+            {/* Newsletter Tab */}
+            {activeTab === 'newsletter' && (
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-dark-gray">Newsletter Subscribers</h2>
+                  <div className="text-sm text-gray-600">
+                    Total: {subscribers.length} subscribers
+                  </div>
+                </div>
+
+                {subscribers.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Mail size={48} className="text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-500">No newsletter subscribers yet</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Email</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Subscribed Date</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {subscribers.map((subscriber) => (
+                          <tr key={subscriber.id} className="hover:bg-gray-50">
+                            <td className="px-4 py-3">
+                              <div className="flex items-center space-x-2">
+                                <Mail size={16} className="text-gray-400" />
+                                <span className="font-medium text-dark-gray">{subscriber.email}</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-gray-600">
+                              {new Date(subscriber.subscribedAt).toLocaleDateString()}
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                subscriber.status === 'active' 
+                                  ? 'bg-green-100 text-green-800' 
+                                  : 'bg-gray-100 text-gray-800'
+                              }`}>
+                                {subscriber.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             )}
 
@@ -699,6 +786,19 @@ const AdminPage: React.FC = () => {
                 />
               </div>
 
+              <div>
+                <label className="block text-sm font-medium text-dark-gray mb-2">
+                  Tags (comma separated)
+                </label>
+                <input
+                  type="text"
+                  value={productForm.tags}
+                  onChange={(e) => setProductForm({ ...productForm, tags: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-light-pink focus:border-transparent"
+                  placeholder="e.g. handmade, flowers, gift"
+                />
+              </div>
+
               {/* Inventory Section */}
               <div className="border-t border-gray-200 pt-6">
                 <h4 className="text-lg font-medium text-dark-gray mb-4">Inventory Management</h4>
@@ -796,17 +896,32 @@ const AdminPage: React.FC = () => {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3">
-                <input
-                  type="checkbox"
-                  id="isUpcoming"
-                  checked={productForm.isUpcoming}
-                  onChange={(e) => setProductForm({ ...productForm, isUpcoming: e.target.checked })}
-                  className="w-4 h-4 text-light-pink bg-gray-100 border-gray-300 rounded focus:ring-light-pink focus:ring-2"
-                />
-                <label htmlFor="isUpcoming" className="text-sm font-medium text-dark-gray">
-                  Mark as upcoming product
-                </label>
+              <div className="flex items-center space-x-6">
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="isUpcoming"
+                    checked={productForm.isUpcoming}
+                    onChange={(e) => setProductForm({ ...productForm, isUpcoming: e.target.checked })}
+                    className="w-4 h-4 text-light-pink bg-gray-100 border-gray-300 rounded focus:ring-light-pink focus:ring-2"
+                  />
+                  <label htmlFor="isUpcoming" className="text-sm font-medium text-dark-gray">
+                    Mark as upcoming product
+                  </label>
+                </div>
+
+                <div className="flex items-center space-x-3">
+                  <input
+                    type="checkbox"
+                    id="isFeatured"
+                    checked={productForm.isFeatured}
+                    onChange={(e) => setProductForm({ ...productForm, isFeatured: e.target.checked })}
+                    className="w-4 h-4 text-light-pink bg-gray-100 border-gray-300 rounded focus:ring-light-pink focus:ring-2"
+                  />
+                  <label htmlFor="isFeatured" className="text-sm font-medium text-dark-gray">
+                    Mark as featured product
+                  </label>
+                </div>
               </div>
             </div>
 

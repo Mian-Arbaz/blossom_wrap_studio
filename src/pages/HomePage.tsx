@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight, Star, Truck, Shield, HeartHandshake, Award } from 'lucide-react';
 import { categories, getFeaturedProducts } from '../data/products';
 import ProductCard from '../components/ProductCard';
+import NewsletterSection from '../components/NewsletterSection';
 
 const HomePage: React.FC = () => {
   const featuredProducts = getFeaturedProducts();
@@ -225,26 +226,7 @@ const HomePage: React.FC = () => {
       </section>
 
       {/* Newsletter Section */}
-      <section className="py-16 px-4 bg-gradient-to-r from-light-pink to-light-blue">
-        <div className="container mx-auto text-center">
-          <h2 className="font-lora text-3xl font-bold text-dark-gray mb-4">
-            Stay Updated
-          </h2>
-          <p className="text-dark-gray mb-8 max-w-md mx-auto">
-            Get notified about new products, special offers, and upcoming collections.
-          </p>
-          <div className="max-w-md mx-auto flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-full border-0 focus:outline-none focus:ring-2 focus:ring-white"
-            />
-            <button className="bg-dark-gray text-white px-6 py-3 rounded-full hover:bg-opacity-80 transition-all duration-300 font-medium">
-              Subscribe
-            </button>
-          </div>
-        </div>
-      </section>
+      <NewsletterSection />
     </div>
   );
 };
