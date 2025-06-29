@@ -5,9 +5,9 @@ import { Link } from 'react-router-dom';
 const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-50 border-t border-gray-200 mt-20 relative z-30">
-      <div className="container mx-auto px-4 py-8 lg:ml-64">
+      <div className="w-full px-4 py-8 lg:ml-64">
         {/* Business Hours - Top Section */}
-        <div className="bg-gradient-to-r from-light-pink to-light-blue rounded-lg p-6 mb-8 max-w-5xl mx-auto">
+        <div className="bg-gradient-to-r from-light-pink to-light-blue rounded-lg p-6 mb-8 mx-auto max-w-6xl">
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
             {/* Header */}
             <div className="flex items-center space-x-3 text-center lg:text-left">
@@ -21,16 +21,16 @@ const Footer: React.FC = () => {
             </div>
             
             {/* Hours Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full lg:w-auto lg:min-w-[400px]">
-              <div className="bg-white bg-opacity-20 rounded-lg p-4 text-center min-w-[120px]">
-                <p className="text-xs text-dark-gray font-medium mb-1">Monday - Friday</p>
-                <p className="text-sm font-bold text-dark-gray">9:00 AM - 8:00 PM</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full lg:w-auto lg:max-w-md">
+              <div className="bg-white bg-opacity-20 rounded-lg p-3 text-center">
+                <p className="text-xs text-dark-gray font-medium mb-1">Mon - Fri</p>
+                <p className="text-sm font-bold text-dark-gray">9AM - 8PM</p>
               </div>
-              <div className="bg-white bg-opacity-20 rounded-lg p-4 text-center min-w-[120px]">
+              <div className="bg-white bg-opacity-20 rounded-lg p-3 text-center">
                 <p className="text-xs text-dark-gray font-medium mb-1">Saturday</p>
-                <p className="text-sm font-bold text-dark-gray">10:00 AM - 6:00 PM</p>
+                <p className="text-sm font-bold text-dark-gray">10AM - 6PM</p>
               </div>
-              <div className="bg-white bg-opacity-20 rounded-lg p-4 text-center min-w-[120px]">
+              <div className="bg-white bg-opacity-20 rounded-lg p-3 text-center">
                 <p className="text-xs text-dark-gray font-medium mb-1">Sunday</p>
                 <p className="text-sm font-bold text-red-600">Closed</p>
               </div>
@@ -39,160 +39,166 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-6 max-w-6xl mx-auto">
-          {/* Company Info */}
-          <div>
-            <div className="flex items-center space-x-3 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-light-pink to-light-blue rounded-full flex items-center justify-center">
-                <span className="text-lg">🌸</span>
+        <div className="mx-auto max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            {/* Company Info */}
+            <div className="space-y-4">
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="w-8 h-8 bg-gradient-to-r from-light-pink to-light-blue rounded-full flex items-center justify-center">
+                  <span className="text-lg">🌸</span>
+                </div>
+                <div>
+                  <h3 className="font-lora font-bold text-dark-gray">Blossom Wrap Studio</h3>
+                  <p className="text-xs text-gray-600">Makes You Smile</p>
+                </div>
               </div>
-              <div>
-                <h3 className="font-lora font-bold text-dark-gray">Blossom Wrap Studio</h3>
-                <p className="text-xs text-gray-600">Makes You Smile</p>
+              
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Creating beautiful handmade gifts and decorations that bring joy to your special moments.
+              </p>
+              
+              {/* Contact Info */}
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2 text-gray-600 text-sm">
+                  <MapPin size={14} className="text-light-pink flex-shrink-0" />
+                  <span>Lahore, Pakistan</span>
+                </div>
+                <div className="flex items-center space-x-2 text-gray-600 text-sm">
+                  <Phone size={14} className="text-light-pink flex-shrink-0" />
+                  <span>+92 300 1234567</span>
+                </div>
+                <div className="flex items-center space-x-2 text-gray-600 text-sm">
+                  <Mail size={14} className="text-light-pink flex-shrink-0" />
+                  <span>info@blossomwrap.com</span>
+                </div>
               </div>
-            </div>
-            <p className="text-gray-600 text-sm mb-4 leading-relaxed">
-              Creating beautiful handmade gifts and decorations that bring joy to your special moments.
-            </p>
-            
-            {/* Contact Info */}
-            <div className="space-y-2 mb-4">
-              <div className="flex items-center space-x-2 text-gray-600 text-sm">
-                <MapPin size={14} className="text-light-pink flex-shrink-0" />
-                <span>Lahore, Pakistan</span>
-              </div>
-              <div className="flex items-center space-x-2 text-gray-600 text-sm">
-                <Phone size={14} className="text-light-pink flex-shrink-0" />
-                <span>+92 300 1234567</span>
-              </div>
-              <div className="flex items-center space-x-2 text-gray-600 text-sm">
-                <Mail size={14} className="text-light-pink flex-shrink-0" />
-                <span>info@blossomwrap.com</span>
+
+              {/* Social Links */}
+              <div className="flex space-x-3 pt-2">
+                <a 
+                  href="#" 
+                  className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-light-pink hover:bg-light-pink hover:bg-opacity-20 transition-all duration-300 shadow-sm"
+                  aria-label="Facebook"
+                >
+                  <Facebook size={16} />
+                </a>
+                <a 
+                  href="#" 
+                  className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-light-pink hover:bg-light-pink hover:bg-opacity-20 transition-all duration-300 shadow-sm"
+                  aria-label="Instagram"
+                >
+                  <Instagram size={16} />
+                </a>
+                <a 
+                  href="#" 
+                  className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-light-pink hover:bg-light-pink hover:bg-opacity-20 transition-all duration-300 shadow-sm"
+                  aria-label="Twitter"
+                >
+                  <Twitter size={16} />
+                </a>
               </div>
             </div>
 
-            {/* Social Links */}
-            <div className="flex space-x-3">
-              <a 
-                href="#" 
-                className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-light-pink hover:bg-light-pink hover:bg-opacity-20 transition-all duration-300 shadow-sm"
-                aria-label="Facebook"
-              >
-                <Facebook size={16} />
-              </a>
-              <a 
-                href="#" 
-                className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-light-pink hover:bg-light-pink hover:bg-opacity-20 transition-all duration-300 shadow-sm"
-                aria-label="Instagram"
-              >
-                <Instagram size={16} />
-              </a>
-              <a 
-                href="#" 
-                className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-light-pink hover:bg-light-pink hover:bg-opacity-20 transition-all duration-300 shadow-sm"
-                aria-label="Twitter"
-              >
-                <Twitter size={16} />
-              </a>
+            {/* Quick Links */}
+            <div>
+              <h4 className="font-lora font-semibold text-dark-gray mb-4">Quick Links</h4>
+              <ul className="space-y-3">
+                <li>
+                  <Link to="/" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
+                    <span>Home</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/contact" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
+                    <span>Contact Us</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/products/handmade-flowers" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
+                    <span>Handmade Flowers</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/products/gift-packs" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
+                    <span>Gift Packs</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/wishlist" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
+                    <span>My Wishlist</span>
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            {/* Categories */}
+            <div>
+              <h4 className="font-lora font-semibold text-dark-gray mb-4">Categories</h4>
+              <ul className="space-y-3">
+                <li>
+                  <Link to="/products/calligraphy" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
+                    <span>Calligraphy</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/products/birthday-gifts" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
+                    <span>Birthday Gifts</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/products/couple-gifts" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
+                    <span>Couple Gifts</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/products/gift-packing" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
+                    <span>Gift Packing</span>
+                  </Link>
+                </li>
+              </ul>
             </div>
           </div>
 
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-lora font-semibold text-dark-gray mb-4">Quick Links</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm">
-                  Home
+          {/* Bottom Section - Copyright & Legal Links */}
+          <div className="border-t border-gray-200 pt-6">
+            <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
+              {/* Copyright */}
+              <div className="flex items-center justify-center lg:justify-start space-x-1 text-sm text-gray-600 order-2 lg:order-1">
+                <span>Made with</span>
+                <Heart size={14} className="text-light-pink fill-current" />
+                <span>by Blossom Wrap Studio © 2024</span>
+              </div>
+              
+              {/* Legal Links */}
+              <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-6 text-sm text-gray-600 order-1 lg:order-2">
+                <Link 
+                  to="/privacy" 
+                  className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
+                >
+                  Privacy Policy
                 </Link>
-              </li>
-              <li>
-                <Link to="/contact" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm">
-                  Contact Us
+                <span className="text-gray-300 hidden sm:inline">•</span>
+                <Link 
+                  to="/terms" 
+                  className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
+                >
+                  Terms of Service
                 </Link>
-              </li>
-              <li>
-                <Link to="/products/handmade-flowers" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm">
-                  Handmade Flowers
+                <span className="text-gray-300 hidden sm:inline">•</span>
+                <Link 
+                  to="/shipping" 
+                  className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
+                >
+                  Shipping Info
                 </Link>
-              </li>
-              <li>
-                <Link to="/products/gift-packs" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm">
-                  Gift Packs
+                <span className="text-gray-300 hidden sm:inline">•</span>
+                <Link 
+                  to="/returns" 
+                  className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
+                >
+                  Returns
                 </Link>
-              </li>
-              <li>
-                <Link to="/wishlist" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm">
-                  My Wishlist
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Categories */}
-          <div>
-            <h4 className="font-lora font-semibold text-dark-gray mb-4">Categories</h4>
-            <ul className="space-y-2">
-              <li>
-                <Link to="/products/calligraphy" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm">
-                  Calligraphy
-                </Link>
-              </li>
-              <li>
-                <Link to="/products/birthday-gifts" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm">
-                  Birthday Gifts
-                </Link>
-              </li>
-              <li>
-                <Link to="/products/couple-gifts" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm">
-                  Couple Gifts
-                </Link>
-              </li>
-              <li>
-                <Link to="/products/gift-packing" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm">
-                  Gift Packing
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        {/* Bottom Section - Copyright & Legal Links */}
-        <div className="border-t border-gray-200 pt-6 max-w-6xl mx-auto">
-          <div className="flex flex-col lg:flex-row items-center justify-between space-y-4 lg:space-y-0">
-            {/* Copyright */}
-            <div className="flex items-center justify-center lg:justify-start space-x-1 text-sm text-gray-600">
-              <span>Made with</span>
-              <Heart size={14} className="text-light-pink fill-current" />
-              <span>by Blossom Wrap Studio © 2024</span>
-            </div>
-            
-            {/* Legal Links */}
-            <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-6 text-sm text-gray-600">
-              <Link 
-                to="/privacy" 
-                className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
-              >
-                Privacy Policy
-              </Link>
-              <Link 
-                to="/terms" 
-                className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
-              >
-                Terms of Service
-              </Link>
-              <Link 
-                to="/shipping" 
-                className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
-              >
-                Shipping Info
-              </Link>
-              <Link 
-                to="/returns" 
-                className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
-              >
-                Returns
-              </Link>
+              </div>
             </div>
           </div>
         </div>
