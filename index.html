@@ -4,15 +4,54 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp" />
+    <meta http-equiv="Cross-Origin-Embedder-Policy" content="credentialless" />
     <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin" />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Blossom Wrap Studio - Beautiful handmade gifts, flowers, and decorations that make you smile. Based in Pakistan." />
+    <meta name="keywords" content="handmade gifts, flowers, calligraphy, gift packing, Pakistan, Lahore" />
+    <meta name="author" content="Blossom Wrap Studio" />
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Blossom Wrap Studio - Makes You Smile" />
+    <meta property="og:description" content="Beautiful handmade gifts and decorations from Pakistan" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://blossomwrapstudio.com" />
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Blossom Wrap Studio" />
+    <meta name="twitter:description" content="Beautiful handmade gifts and decorations" />
+    
     <title>Blossom Wrap Studio - Makes You Smile</title>
+    
+    <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://images.pexels.com">
+    
+    <!-- Font loading with display swap for better performance -->
     <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Prevent FOUC -->
+    <style>
+      body { visibility: hidden; }
+      .font-loaded body { visibility: visible; }
+    </style>
+    
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#FADADD" />
+    
+    <!-- Manifest for PWA -->
+    <link rel="manifest" href="/manifest.json" />
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    
+    <!-- Font loading optimization -->
+    <script>
+      document.documentElement.classList.add('font-loaded');
+    </script>
   </body>
 </html>
