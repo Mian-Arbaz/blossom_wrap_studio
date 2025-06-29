@@ -10,7 +10,7 @@ const Sidebar: React.FC = () => {
     <>
       {/* Desktop Sidebar */}
       <aside className="hidden lg:block fixed left-0 top-20 bottom-0 w-64 bg-white shadow-lg z-40 transition-all duration-300 hover:bg-opacity-95 overflow-y-auto">
-        <div className="p-6 pb-32"> {/* Added extra bottom padding */}
+        <div className="p-6 pb-32"> {/* Added extra bottom padding for footer clearance */}
           <Link
             to="/"
             className="flex items-center space-x-3 text-dark-gray hover:text-light-pink transition-colors duration-300 mb-6 p-3 rounded-lg hover:bg-light-pink hover:bg-opacity-20"
@@ -58,7 +58,7 @@ const Sidebar: React.FC = () => {
             onClick={() => setIsOpen(false)} 
           />
           <aside className="absolute left-0 top-0 bottom-0 w-80 max-w-[85vw] bg-white shadow-xl transform transition-transform duration-300 ease-out overflow-y-auto">
-            <div className="p-6 pb-32"> {/* Added extra bottom padding */}
+            <div className="p-6 pb-32"> {/* Added extra bottom padding for footer clearance */}
               {/* Mobile Header */}
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
                 <div className="flex items-center space-x-3">

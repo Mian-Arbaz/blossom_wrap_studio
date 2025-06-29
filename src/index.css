@@ -46,6 +46,30 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Ensure proper layout and prevent footer overlap */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+#root {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Main content area adjustments */
+main {
+  flex: 1;
+  min-height: calc(100vh - 80px); /* Account for header height */
+}
+
+/* Footer positioning */
+footer {
+  margin-top: auto;
+}
+
 /* Loading animation */
 @keyframes shimmer {
   0% {
@@ -62,11 +86,68 @@ html {
   animation: shimmer 1.5s infinite;
 }
 
+/* Container consistency across all pages */
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+@media (min-width: 1536px) {
+  .container {
+    max-width: 1536px;
+  }
+}
+
 /* Mobile optimizations */
 @media (max-width: 768px) {
   .container {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+  
+  /* Ensure footer doesn't overlap with mobile navigation */
+  footer {
+    padding-bottom: 6rem;
+  }
+}
+
+/* Desktop sidebar adjustments */
+@media (min-width: 1024px) {
+  /* Ensure all content respects sidebar width */
+  .lg\:ml-64 {
+    margin-left: 16rem;
+  }
+  
+  /* Footer specific adjustments for desktop */
+  footer .lg\:ml-64 {
+    margin-left: 16rem;
   }
 }
 
@@ -102,4 +183,163 @@ html {
 /* Dark mode support (future enhancement) */
 @media (prefers-color-scheme: dark) {
   /* Dark mode styles can be added here */
+}
+
+/* Ensure consistent spacing and alignment */
+.section-padding {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding-top: 6rem;
+    padding-bottom: 6rem;
+  }
+}
+
+/* Grid alignment fixes */
+.grid-container {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .grid-container {
+    gap: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-container {
+    gap: 3rem;
+  }
+}
+
+/* Flex alignment utilities */
+.flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-start {
+  display: flex;
+  align-items: flex-start;
+}
+
+/* Text alignment utilities */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Consistent border radius */
+.rounded-standard {
+  border-radius: 0.5rem;
+}
+
+.rounded-large {
+  border-radius: 1rem;
+}
+
+/* Shadow utilities */
+.shadow-soft {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.shadow-medium {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+/* Transition utilities */
+.transition-standard {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.transition-fast {
+  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Hover effects */
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Focus states */
+.focus-ring:focus {
+  outline: 2px solid #FADADD;
+  outline-offset: 2px;
+}
+
+/* Button reset */
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* Link reset */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Input reset */
+input, textarea, select {
+  border: none;
+  outline: none;
+  background: none;
+}
+
+/* List reset */
+ul, ol {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Image optimization */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Accessibility improvements */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 1000;
+}
+
+.skip-link:focus {
+  top: 6px;
 }

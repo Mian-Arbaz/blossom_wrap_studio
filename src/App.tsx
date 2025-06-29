@@ -24,10 +24,10 @@ function App() {
       <CartProvider>
         <NotificationProvider>
           <Router>
-            <div className="min-h-screen bg-white font-poppins">
+            <div className="min-h-screen bg-white font-poppins flex flex-col">
               <Header />
               <Sidebar />
-              <main className="transition-all duration-300">
+              <main className="flex-1">
                 <Routes>
                   <Route path="/" element={<HomePage />} />
                   <Route path="/products/:category" element={<ProductsPage />} />
