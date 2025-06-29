@@ -2,21 +2,24 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Package, Users, MessageSquare, Plus, Edit, Trash2, 
-  Eye, EyeOff, Save, X, Upload, Clock, Star 
+  Eye, EyeOff, Save, X, Upload, Clock, Star, 
+  TrendingDown, AlertTriangle, BarChart3, ShoppingCart,
+  Minus, PlusIcon
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { 
   getProducts, addProduct, updateProduct, deleteProduct, 
-  categories, Product 
+  categories, Product, getInventoryStats, updateInventory
 } from '../data/products';
 
 const AdminPage: React.FC = () => {
   const { isAdmin, user } = useAuth();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState<'products' | 'users' | 'messages'>('products');
+  const [activeTab, setActiveTab] = useState<'products' | 'users' | 'messages' | 'inventory'>('products');
   const [products, setProducts] = useState<Product[]>([]);
   const [users, setUsers] = useState<any[]>([]);
   const [messages, setMessages] = useState<any[]>([]);
+  const [inventoryStats, setInventoryStats] = useState<any>({});
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [isAddingProduct, setIsAddingProduct] = useState(false);
@@ -27,7 +30,12 @@ const AdminPage: React.FC = () => {
     description: '',
     price: 0,
     image: '',
-    isUpcoming: false
+    isUpcoming: false,
+    inventory: {
+      total: 0,
+      remaining: 0,
+      lowStockThreshold: 5
+    }
   });
 
   useEffect(() => {
@@ -37,9 +45,11 @@ const AdminPage: React.FC = () => {
     }
 
     // Load data
-    setProducts(getProducts());
+    const loadedProducts = getProducts();
+    setProducts(loadedProducts);
     setUsers(JSON.parse(localStorage.getItem('users') || '[]'));
     setMessages(JSON.parse(localStorage.getItem('contactMessages') || '[]'));
+    setInventoryStats(getInventoryStats());
   }, [isAdmin, navigate]);
 
   const handleAddProduct = () => {
@@ -51,7 +61,12 @@ const AdminPage: React.FC = () => {
       description: '',
       price: 0,
       image: '',
-      isUpcoming: false
+      isUpcoming: false,
+      inventory: {
+        total: 0,
+        remaining: 0,
+        lowStockThreshold: 5
+      }
     });
     setIsEditModalOpen(true);
   };
@@ -65,7 +80,12 @@ const AdminPage: React.FC = () => {
       description: product.description,
       price: product.price,
       image: product.image,
-      isUpcoming: product.isUpcoming || false
+      isUpcoming: product.isUpcoming || false,
+      inventory: product.inventory || {
+        total: 0,
+        remaining: 0,
+        lowStockThreshold: 5
+      }
     });
     setIsEditModalOpen(true);
   };
@@ -82,7 +102,9 @@ const AdminPage: React.FC = () => {
       updateProduct(editingProduct.id, productForm);
     }
 
-    setProducts(getProducts());
+    const updatedProducts = getProducts();
+    setProducts(updatedProducts);
+    setInventoryStats(getInventoryStats());
     setIsEditModalOpen(false);
     setEditingProduct(null);
   };
@@ -90,7 +112,20 @@ const AdminPage: React.FC = () => {
   const handleDeleteProduct = (id: string) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       deleteProduct(id);
-      setProducts(getProducts());
+      const updatedProducts = getProducts();
+      setProducts(updatedProducts);
+      setInventoryStats(getInventoryStats());
+    }
+  };
+
+  const handleInventoryUpdate = (productId: string, change: number) => {
+    const product = products.find(p => p.id === productId);
+    if (product && product.inventory) {
+      const newRemaining = Math.max(0, Math.min(product.inventory.total, product.inventory.remaining + change));
+      updateInventory(productId, newRemaining);
+      const updatedProducts = getProducts();
+      setProducts(updatedProducts);
+      setInventoryStats(getInventoryStats());
     }
   };
 
@@ -110,11 +145,22 @@ const AdminPage: React.FC = () => {
     }
   };
 
+  const getStockStatus = (product: Product) => {
+    if (!product.inventory) return { status: 'unknown', color: 'gray' };
+    
+    const { remaining, lowStockThreshold } = product.inventory;
+    
+    if (remaining === 0) return { status: 'Out of Stock', color: 'red' };
+    if (remaining <= lowStockThreshold) return { status: 'Low Stock', color: 'yellow' };
+    return { status: 'In Stock', color: 'green' };
+  };
+
   const stats = {
     totalProducts: products.length,
     upcomingProducts: products.filter(p => p.isUpcoming).length,
     totalUsers: users.length,
-    totalMessages: messages.length
+    totalMessages: messages.length,
+    ...inventoryStats
   };
 
   if (!isAdmin) {
@@ -154,23 +200,11 @@ const AdminPage: React.FC = () => {
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Upcoming Products</p>
-                <p className="text-2xl font-bold text-dark-gray">{stats.upcomingProducts}</p>
+                <p className="text-sm text-gray-600">Total Inventory</p>
+                <p className="text-2xl font-bold text-dark-gray">{stats.totalInventory || 0}</p>
               </div>
-              <div className="w-12 h-12 bg-light-blue rounded-lg flex items-center justify-center">
-                <Clock size={24} className="text-dark-gray" />
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow-sm p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-600">Total Users</p>
-                <p className="text-2xl font-bold text-dark-gray">{stats.totalUsers}</p>
-              </div>
-              <div className="w-12 h-12 bg-gradient-to-r from-light-pink to-light-blue rounded-lg flex items-center justify-center">
-                <Users size={24} className="text-dark-gray" />
+              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                <BarChart3 size={24} className="text-blue-600" />
               </div>
             </div>
           </div>
@@ -178,11 +212,23 @@ const AdminPage: React.FC = () => {
           <div className="bg-white rounded-lg shadow-sm p-6">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm text-gray-600">Messages</p>
-                <p className="text-2xl font-bold text-dark-gray">{stats.totalMessages}</p>
+                <p className="text-sm text-gray-600">Items Sold</p>
+                <p className="text-2xl font-bold text-dark-gray">{stats.totalSold || 0}</p>
               </div>
-              <div className="w-12 h-12 bg-yellow-200 rounded-lg flex items-center justify-center">
-                <MessageSquare size={24} className="text-dark-gray" />
+              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
+                <ShoppingCart size={24} className="text-green-600" />
+              </div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-sm p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Low Stock Items</p>
+                <p className="text-2xl font-bold text-red-600">{stats.lowStockCount || 0}</p>
+              </div>
+              <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
+                <AlertTriangle size={24} className="text-red-600" />
               </div>
             </div>
           </div>
@@ -194,6 +240,7 @@ const AdminPage: React.FC = () => {
             <nav className="flex space-x-8 px-6">
               {[
                 { id: 'products', label: 'Products', icon: Package },
+                { id: 'inventory', label: 'Inventory', icon: BarChart3 },
                 { id: 'users', label: 'Users', icon: Users },
                 { id: 'messages', label: 'Messages', icon: MessageSquare }
               ].map(({ id, label, icon: Icon }) => (
@@ -235,69 +282,271 @@ const AdminPage: React.FC = () => {
                         <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Product</th>
                         <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Category</th>
                         <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Price</th>
+                        <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Stock</th>
                         <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
                         <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200">
-                      {products.map((product) => (
-                        <tr key={product.id} className="hover:bg-gray-50">
-                          <td className="px-4 py-3">
-                            <div className="flex items-center space-x-3">
-                              <img
-                                src={product.image}
-                                alt={product.name}
-                                className="w-12 h-12 rounded-lg object-cover"
-                              />
-                              <div>
-                                <p className="font-medium text-dark-gray">{product.name}</p>
-                                <p className="text-sm text-gray-500 truncate max-w-xs">
-                                  {product.description}
-                                </p>
+                      {products.map((product) => {
+                        const stockStatus = getStockStatus(product);
+                        return (
+                          <tr key={product.id} className="hover:bg-gray-50">
+                            <td className="px-4 py-3">
+                              <div className="flex items-center space-x-3">
+                                <img
+                                  src={product.image}
+                                  alt={product.name}
+                                  className="w-12 h-12 rounded-lg object-cover"
+                                />
+                                <div>
+                                  <p className="font-medium text-dark-gray">{product.name}</p>
+                                  <p className="text-sm text-gray-500 truncate max-w-xs">
+                                    {product.description}
+                                  </p>
+                                </div>
                               </div>
-                            </div>
-                          </td>
-                          <td className="px-4 py-3">
-                            <span className="text-sm text-gray-600">
-                              {categories.find(c => c.id === product.category)?.name}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3">
-                            <span className="font-medium text-dark-gray">
-                              PKR {product.price.toLocaleString()}
-                            </span>
-                          </td>
-                          <td className="px-4 py-3">
-                            {product.isUpcoming ? (
-                              <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">
-                                Upcoming
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className="text-sm text-gray-600">
+                                {categories.find(c => c.id === product.category)?.name}
                               </span>
-                            ) : (
-                              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
-                                Active
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className="font-medium text-dark-gray">
+                                PKR {product.price.toLocaleString()}
                               </span>
-                            )}
-                          </td>
-                          <td className="px-4 py-3">
-                            <div className="flex items-center space-x-2">
-                              <button
-                                onClick={() => handleEditProduct(product)}
-                                className="text-blue-600 hover:text-blue-800 transition-colors duration-300"
-                              >
-                                <Edit size={16} />
-                              </button>
-                              <button
-                                onClick={() => handleDeleteProduct(product.id)}
-                                className="text-red-600 hover:text-red-800 transition-colors duration-300"
-                              >
-                                <Trash2 size={16} />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="text-sm">
+                                <div className="font-medium text-dark-gray">
+                                  {product.inventory?.remaining || 0} / {product.inventory?.total || 0}
+                                </div>
+                                <div className="text-gray-500">
+                                  {product.inventory ? 
+                                    `${Math.round((product.inventory.remaining / product.inventory.total) * 100)}% remaining` 
+                                    : 'No inventory data'
+                                  }
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="space-y-1">
+                                {product.isUpcoming ? (
+                                  <span className="bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full text-xs font-medium">
+                                    Upcoming
+                                  </span>
+                                ) : (
+                                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                    stockStatus.color === 'green' ? 'bg-green-100 text-green-800' :
+                                    stockStatus.color === 'yellow' ? 'bg-yellow-100 text-yellow-800' :
+                                    stockStatus.color === 'red' ? 'bg-red-100 text-red-800' :
+                                    'bg-gray-100 text-gray-800'
+                                  }`}>
+                                    {stockStatus.status}
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+                            <td className="px-4 py-3">
+                              <div className="flex items-center space-x-2">
+                                <button
+                                  onClick={() => handleEditProduct(product)}
+                                  className="text-blue-600 hover:text-blue-800 transition-colors duration-300"
+                                >
+                                  <Edit size={16} />
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteProduct(product.id)}
+                                  className="text-red-600 hover:text-red-800 transition-colors duration-300"
+                                >
+                                  <Trash2 size={16} />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
+                </div>
+              </div>
+            )}
+
+            {/* Inventory Tab */}
+            {activeTab === 'inventory' && (
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-dark-gray">Inventory Management</h2>
+                </div>
+
+                {/* Inventory Overview */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-lg p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-blue-600 font-medium">Total Items in Stock</p>
+                        <p className="text-3xl font-bold text-blue-800">{stats.totalRemaining || 0}</p>
+                      </div>
+                      <div className="w-12 h-12 bg-blue-200 rounded-lg flex items-center justify-center">
+                        <Package size={24} className="text-blue-600" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-lg p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-green-600 font-medium">Items Sold</p>
+                        <p className="text-3xl font-bold text-green-800">{stats.totalSold || 0}</p>
+                      </div>
+                      <div className="w-12 h-12 bg-green-200 rounded-lg flex items-center justify-center">
+                        <TrendingDown size={24} className="text-green-600" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="bg-gradient-to-r from-red-50 to-red-100 rounded-lg p-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-sm text-red-600 font-medium">Out of Stock</p>
+                        <p className="text-3xl font-bold text-red-800">{stats.outOfStockCount || 0}</p>
+                      </div>
+                      <div className="w-12 h-12 bg-red-200 rounded-lg flex items-center justify-center">
+                        <AlertTriangle size={24} className="text-red-600" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Low Stock Alerts */}
+                {stats.lowStockProducts && stats.lowStockProducts.length > 0 && (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-6 mb-8">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <AlertTriangle size={20} className="text-yellow-600" />
+                      <h3 className="font-semibold text-yellow-800">Low Stock Alert</h3>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {stats.lowStockProducts.map((product: Product) => (
+                        <div key={product.id} className="bg-white rounded-lg p-4 border border-yellow-200">
+                          <div className="flex items-center space-x-3">
+                            <img
+                              src={product.image}
+                              alt={product.name}
+                              className="w-12 h-12 rounded-lg object-cover"
+                            />
+                            <div className="flex-1">
+                              <p className="font-medium text-dark-gray text-sm">{product.name}</p>
+                              <p className="text-xs text-red-600">
+                                Only {product.inventory?.remaining} left!
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Inventory Table */}
+                <div className="bg-white rounded-lg border border-gray-200">
+                  <div className="px-6 py-4 border-b border-gray-200">
+                    <h3 className="font-semibold text-dark-gray">Product Inventory</h3>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Product</th>
+                          <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Total Stock</th>
+                          <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Remaining</th>
+                          <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Sold</th>
+                          <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                          <th className="px-6 py-3 text-left text-sm font-medium text-gray-700">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {products.map((product) => {
+                          const stockStatus = getStockStatus(product);
+                          const inventory = product.inventory || { total: 0, remaining: 0, lowStockThreshold: 5 };
+                          const sold = inventory.total - inventory.remaining;
+                          const percentage = inventory.total > 0 ? (inventory.remaining / inventory.total) * 100 : 0;
+                          
+                          return (
+                            <tr key={product.id} className="hover:bg-gray-50">
+                              <td className="px-6 py-4">
+                                <div className="flex items-center space-x-3">
+                                  <img
+                                    src={product.image}
+                                    alt={product.name}
+                                    className="w-10 h-10 rounded-lg object-cover"
+                                  />
+                                  <div>
+                                    <p className="font-medium text-dark-gray">{product.name}</p>
+                                    <p className="text-sm text-gray-500">
+                                      {categories.find(c => c.id === product.category)?.name}
+                                    </p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className="text-sm font-medium text-dark-gray">
+                                  {inventory.total}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex items-center space-x-2">
+                                  <span className="text-sm font-medium text-dark-gray">
+                                    {inventory.remaining}
+                                  </span>
+                                  <div className="w-20 bg-gray-200 rounded-full h-2">
+                                    <div
+                                      className={`h-2 rounded-full ${
+                                        percentage > 50 ? 'bg-green-500' :
+                                        percentage > 20 ? 'bg-yellow-500' : 'bg-red-500'
+                                      }`}
+                                      style={{ width: `${percentage}%` }}
+                                    ></div>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className="text-sm text-gray-600">{sold}</span>
+                              </td>
+                              <td className="px-6 py-4">
+                                <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                  stockStatus.color === 'green' ? 'bg-green-100 text-green-800' :
+                                  stockStatus.color === 'yellow' ? 'bg-yellow-100 text-yellow-800' :
+                                  stockStatus.color === 'red' ? 'bg-red-100 text-red-800' :
+                                  'bg-gray-100 text-gray-800'
+                                }`}>
+                                  {stockStatus.status}
+                                </span>
+                              </td>
+                              <td className="px-6 py-4">
+                                <div className="flex items-center space-x-2">
+                                  <button
+                                    onClick={() => handleInventoryUpdate(product.id, -1)}
+                                    disabled={inventory.remaining <= 0}
+                                    className="p-1 rounded bg-red-100 text-red-600 hover:bg-red-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300"
+                                  >
+                                    <Minus size={14} />
+                                  </button>
+                                  <button
+                                    onClick={() => handleInventoryUpdate(product.id, 1)}
+                                    disabled={inventory.remaining >= inventory.total}
+                                    className="p-1 rounded bg-green-100 text-green-600 hover:bg-green-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300"
+                                  >
+                                    <PlusIcon size={14} />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
             )}
@@ -448,6 +697,75 @@ const AdminPage: React.FC = () => {
                   placeholder="Enter price"
                   min="0"
                 />
+              </div>
+
+              {/* Inventory Section */}
+              <div className="border-t border-gray-200 pt-6">
+                <h4 className="text-lg font-medium text-dark-gray mb-4">Inventory Management</h4>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-dark-gray mb-2">
+                      Total Stock *
+                    </label>
+                    <input
+                      type="number"
+                      value={productForm.inventory.total}
+                      onChange={(e) => {
+                        const total = Number(e.target.value);
+                        setProductForm({ 
+                          ...productForm, 
+                          inventory: { 
+                            ...productForm.inventory, 
+                            total,
+                            remaining: Math.min(productForm.inventory.remaining, total)
+                          } 
+                        });
+                      }}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-light-pink focus:border-transparent"
+                      placeholder="Total stock"
+                      min="0"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-dark-gray mb-2">
+                      Current Stock *
+                    </label>
+                    <input
+                      type="number"
+                      value={productForm.inventory.remaining}
+                      onChange={(e) => setProductForm({ 
+                        ...productForm, 
+                        inventory: { 
+                          ...productForm.inventory, 
+                          remaining: Math.min(Number(e.target.value), productForm.inventory.total)
+                        } 
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-light-pink focus:border-transparent"
+                      placeholder="Current stock"
+                      min="0"
+                      max={productForm.inventory.total}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-dark-gray mb-2">
+                      Low Stock Alert
+                    </label>
+                    <input
+                      type="number"
+                      value={productForm.inventory.lowStockThreshold}
+                      onChange={(e) => setProductForm({ 
+                        ...productForm, 
+                        inventory: { 
+                          ...productForm.inventory, 
+                          lowStockThreshold: Number(e.target.value)
+                        } 
+                      })}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-light-pink focus:border-transparent"
+                      placeholder="Low stock threshold"
+                      min="0"
+                    />
+                  </div>
+                </div>
               </div>
 
               <div>
