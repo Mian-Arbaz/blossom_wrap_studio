@@ -22,7 +22,7 @@ const HomePage: React.FC = () => {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4 animate-slide-up" style={{ animationDelay: '0.3s' }}>
             <Link
-              to="/products/handmade-flowers"
+              to="/products"
               className="bg-white text-dark-gray px-8 py-3 rounded-full hover:shadow-lg transition-all duration-300 flex items-center space-x-2 font-medium transform hover:scale-105"
             >
               <span>Shop Now</span>
@@ -159,7 +159,7 @@ const HomePage: React.FC = () => {
           
           <div className="text-center mt-12">
             <Link
-              to="/products/handmade-flowers"
+              to="/products"
               className="bg-light-pink text-dark-gray px-8 py-3 rounded-full hover:bg-opacity-80 transition-all duration-300 inline-flex items-center space-x-2 font-medium transform hover:scale-105"
             >
               <span>View All Products</span>

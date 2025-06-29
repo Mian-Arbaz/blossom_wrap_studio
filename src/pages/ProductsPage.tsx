@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Filter, Grid, List } from 'lucide-react';
 import { getProductsByCategory, categories } from '../data/products';
 import ProductCard from '../components/ProductCard';
 
 const ProductsPage: React.FC = () => {
   const { category } = useParams<{ category: string }>();
+  const navigate = useNavigate();
   const [products, setProducts] = useState<any[]>([]);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState<'name' | 'price'>('name');
@@ -14,6 +15,9 @@ const ProductsPage: React.FC = () => {
   const categoryInfo = categories.find(cat => cat.id === category);
 
   useEffect(() => {
+    // Scroll to top when category changes
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
     if (category) {
       let categoryProducts = getProductsByCategory(category);
       
@@ -82,7 +86,7 @@ const ProductsPage: React.FC = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as 'name' | 'price')}
-                className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-light-pink"
+                className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-light-pink hover:border-light-pink transition-colors duration-300"
               >
                 <option value="name">Sort by Name</option>
                 <option value="price">Sort by Price</option>
@@ -92,7 +96,7 @@ const ProductsPage: React.FC = () => {
             <select
               value={sortOrder}
               onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
-              className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-light-pink"
+              className="border border-gray-300 rounded px-3 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-light-pink hover:border-light-pink transition-colors duration-300"
             >
               <option value="asc">{sortBy === 'name' ? 'A-Z' : 'Low to High'}</option>
               <option value="desc">{sortBy === 'name' ? 'Z-A' : 'High to Low'}</option>
@@ -102,13 +106,21 @@ const ProductsPage: React.FC = () => {
           <div className="flex items-center space-x-2">
             <button
               onClick={() => setViewMode('grid')}
-              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-light-pink text-dark-gray' : 'text-gray-600 hover:text-dark-gray'} transition-colors duration-300`}
+              className={`p-2 rounded transition-colors duration-300 ${
+                viewMode === 'grid' 
+                  ? 'bg-light-pink text-dark-gray' 
+                  : 'text-gray-600 hover:text-dark-gray hover:bg-gray-100'
+              }`}
             >
               <Grid size={16} />
             </button>
             <button
               onClick={() => setViewMode('list')}
-              className={`p-2 rounded ${viewMode === 'list' ? 'bg-light-pink text-dark-gray' : 'text-gray-600 hover:text-dark-gray'} transition-colors duration-300`}
+              className={`p-2 rounded transition-colors duration-300 ${
+                viewMode === 'list' 
+                  ? 'bg-light-pink text-dark-gray' 
+                  : 'text-gray-600 hover:text-dark-gray hover:bg-gray-100'
+              }`}
             >
               <List size={16} />
             </button>
@@ -150,7 +162,7 @@ const ProductsPage: React.FC = () => {
                   {viewMode === 'grid' ? (
                     <ProductCard product={product} priority={index < 4} />
                   ) : (
-                    <div className="bg-white rounded-lg shadow-md overflow-hidden flex">
+                    <div className="bg-white rounded-lg shadow-md overflow-hidden flex hover:shadow-lg transition-shadow duration-300">
                       <div className="w-48 h-32 flex-shrink-0">
                         <img
                           src={product.image}
@@ -163,7 +175,7 @@ const ProductsPage: React.FC = () => {
                         <h3 className="font-lora text-xl font-semibold text-dark-gray mb-2">
                           {product.name}
                         </h3>
-                        <p className="text-gray-600 mb-3">
+                        <p className="text-gray-600 mb-3 line-clamp-2">
                           {product.description}
                         </p>
                         <div className="flex items-center justify-between">

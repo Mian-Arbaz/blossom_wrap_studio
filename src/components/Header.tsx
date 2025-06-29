@@ -46,6 +46,9 @@ const Header: React.FC = () => {
               <Link to="/" className="text-dark-gray hover:text-light-pink transition-colors duration-300 font-medium">
                 Home
               </Link>
+              <Link to="/products" className="text-dark-gray hover:text-light-pink transition-colors duration-300 font-medium">
+                All Products
+              </Link>
               <Link to="/contact" className="text-dark-gray hover:text-light-pink transition-colors duration-300 font-medium">
                 Contact
               </Link>
@@ -103,14 +106,14 @@ const Header: React.FC = () => {
                     className="flex items-center space-x-2 text-dark-gray hover:text-light-pink transition-colors duration-300"
                   >
                     <User size={20} />
-                    <span className="hidden sm:block font-medium">{user?.name}</span>
+                    <span className="hidden sm:block font-medium max-w-[120px] truncate">{user?.name}</span>
                   </button>
                   
                   {isUserMenuOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
-                      <div className="px-4 py-2 border-b border-gray-200">
-                        <p className="font-medium text-dark-gray">{user?.name}</p>
-                        <p className="text-sm text-gray-600">{user?.email}</p>
+                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
+                      <div className="px-4 py-3 border-b border-gray-200">
+                        <p className="font-medium text-dark-gray truncate">{user?.name}</p>
+                        <p className="text-sm text-gray-600 truncate">{user?.email}</p>
                       </div>
                       {isAdmin && (
                         <Link
@@ -177,6 +180,13 @@ const Header: React.FC = () => {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   Home
+                </Link>
+                <Link
+                  to="/products"
+                  className="text-dark-gray hover:text-light-pink transition-colors duration-300 font-medium"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  All Products
                 </Link>
                 <Link
                   to="/contact"

@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import NotificationToast from './components/NotificationToast';
 import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
+import AllProductsPage from './pages/AllProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
@@ -30,6 +31,7 @@ function App() {
               <main className="flex-1">
                 <Routes>
                   <Route path="/" element={<HomePage />} />
+                  <Route path="/products" element={<AllProductsPage />} />
                   <Route path="/products/:category" element={<ProductsPage />} />
                   <Route path="/product/:id" element={<ProductDetailPage />} />
                   <Route path="/login" element={<LoginPage />} />

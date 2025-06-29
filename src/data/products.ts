@@ -99,10 +99,10 @@ export const mockProducts: Product[] = [
     category: 'calligraphy',
     description: 'Personalized calligraphy artwork with your custom message. Perfect for home decoration.',
     price: 1500,
-    image: 'https://images.pexels.com/photos/6290/light-typography-black-close-up.jpg?auto=compress&cs=tinysrgb&w=400',
+    image: 'https://images.pexels.com/photos/159519/back-to-school-paper-colored-paper-stationery-159519.jpeg?auto=compress&cs=tinysrgb&w=400',
     images: [
-      'https://images.pexels.com/photos/6290/light-typography-black-close-up.jpg?auto=compress&cs=tinysrgb&w=400',
-      'https://images.pexels.com/photos/159519/back-to-school-paper-colored-paper-stationery-159519.jpeg?auto=compress&cs=tinysrgb&w=400'
+      'https://images.pexels.com/photos/159519/back-to-school-paper-colored-paper-stationery-159519.jpeg?auto=compress&cs=tinysrgb&w=400',
+      'https://images.pexels.com/photos/6290/light-typography-black-close-up.jpg?auto=compress&cs=tinysrgb&w=400'
     ],
     tags: ['calligraphy', 'custom', 'art', 'personalized'],
     inventory: {
@@ -257,6 +257,79 @@ export const mockProducts: Product[] = [
       dimensions: '30cm x 25cm x 15cm',
       color: 'Natural Wood'
     }
+  },
+  // Additional products for "View All Products" section
+  {
+    id: '9',
+    name: 'Sunflower Arrangement',
+    category: 'handmade-flowers',
+    description: 'Bright and cheerful sunflower arrangement that brings sunshine to any room.',
+    price: 2000,
+    image: 'https://images.pexels.com/photos/1128797/pexels-photo-1128797.jpeg?auto=compress&cs=tinysrgb&w=400',
+    tags: ['sunflower', 'bright', 'cheerful', 'arrangement'],
+    inventory: {
+      total: 30,
+      remaining: 22,
+      lowStockThreshold: 8
+    },
+    rating: {
+      average: 4.5,
+      count: 16
+    }
+  },
+  {
+    id: '10',
+    name: 'Wedding Gift Collection',
+    category: 'gift-packs',
+    description: 'Elegant wedding gift collection with handmade items for the special couple.',
+    price: 5000,
+    image: 'https://images.pexels.com/photos/264985/pexels-photo-264985.jpeg?auto=compress&cs=tinysrgb&w=400',
+    tags: ['wedding', 'elegant', 'couple', 'collection'],
+    inventory: {
+      total: 15,
+      remaining: 10,
+      lowStockThreshold: 3
+    },
+    rating: {
+      average: 4.8,
+      count: 8
+    }
+  },
+  {
+    id: '11',
+    name: 'Personalized Name Art',
+    category: 'calligraphy',
+    description: 'Beautiful personalized name art in elegant calligraphy style.',
+    price: 1200,
+    image: 'https://images.pexels.com/photos/159519/back-to-school-paper-colored-paper-stationery-159519.jpeg?auto=compress&cs=tinysrgb&w=400',
+    tags: ['personalized', 'name', 'art', 'elegant'],
+    inventory: {
+      total: 40,
+      remaining: 35,
+      lowStockThreshold: 10
+    },
+    rating: {
+      average: 4.6,
+      count: 20
+    }
+  },
+  {
+    id: '12',
+    name: 'Kids Birthday Set',
+    category: 'birthday-gifts',
+    description: 'Fun and colorful birthday set designed especially for children.',
+    price: 3200,
+    image: 'https://images.pexels.com/photos/1729931/pexels-photo-1729931.jpeg?auto=compress&cs=tinysrgb&w=400',
+    tags: ['kids', 'colorful', 'fun', 'children'],
+    inventory: {
+      total: 25,
+      remaining: 18,
+      lowStockThreshold: 5
+    },
+    rating: {
+      average: 4.7,
+      count: 14
+    }
   }
 ];
 
@@ -267,6 +340,10 @@ if (!localStorage.getItem('products')) {
 
 export const getProducts = (): Product[] => {
   return JSON.parse(localStorage.getItem('products') || '[]');
+};
+
+export const getAllProducts = (): Product[] => {
+  return getProducts().filter(product => !product.isUpcoming);
 };
 
 export const getFeaturedProducts = (): Product[] => {
