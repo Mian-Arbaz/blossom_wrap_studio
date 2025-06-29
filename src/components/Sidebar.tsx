@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ChevronRight, Home, Menu, X } from 'lucide-react';
+import { ChevronRight, Home, X } from 'lucide-react';
 import { categories } from '../data/products';
 
 const Sidebar: React.FC = () => {
@@ -9,8 +9,8 @@ const Sidebar: React.FC = () => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:block fixed left-0 top-20 h-full w-64 bg-white shadow-lg z-40 transition-all duration-300 hover:bg-opacity-95">
-        <div className="p-6">
+      <aside className="hidden lg:block fixed left-0 top-20 bottom-0 w-64 bg-white shadow-lg z-40 transition-all duration-300 hover:bg-opacity-95 overflow-y-auto">
+        <div className="p-6 pb-20">
           <Link
             to="/"
             className="flex items-center space-x-3 text-dark-gray hover:text-light-pink transition-colors duration-300 mb-6 p-3 rounded-lg hover:bg-light-pink hover:bg-opacity-20"
@@ -41,13 +41,13 @@ const Sidebar: React.FC = () => {
         </div>
       </aside>
 
-      {/* Mobile Sidebar Toggle Button */}
+      {/* Mobile Sidebar Toggle Button - Changed from Menu to Home icon */}
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="lg:hidden fixed bottom-6 left-6 z-50 bg-light-pink text-dark-gray p-4 rounded-full shadow-lg hover:bg-opacity-80 transition-all duration-300 hover:scale-110 active:scale-95"
         aria-label="Toggle navigation menu"
       >
-        {isOpen ? <X size={20} /> : <Menu size={20} />}
+        <Home size={20} />
       </button>
 
       {/* Mobile Sidebar Overlay */}
@@ -57,8 +57,8 @@ const Sidebar: React.FC = () => {
             className="absolute inset-0 bg-black bg-opacity-50 transition-opacity duration-300" 
             onClick={() => setIsOpen(false)} 
           />
-          <aside className="absolute left-0 top-0 h-full w-80 max-w-[85vw] bg-white shadow-xl transform transition-transform duration-300 ease-out">
-            <div className="p-6">
+          <aside className="absolute left-0 top-0 bottom-0 w-80 max-w-[85vw] bg-white shadow-xl transform transition-transform duration-300 ease-out overflow-y-auto">
+            <div className="p-6 pb-20">
               {/* Mobile Header */}
               <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-200">
                 <div className="flex items-center space-x-3">

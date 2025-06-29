@@ -3,8 +3,8 @@ import { Heart, Facebook, Instagram, Twitter } from 'lucide-react';
 
 const Footer: React.FC = () => {
   return (
-    <footer className="bg-gray-50 border-t border-gray-200 mt-20">
-      <div className="container mx-auto px-4 py-12">
+    <footer className="bg-gray-50 border-t border-gray-200 mt-20 relative z-30">
+      <div className="container mx-auto px-4 py-12 lg:ml-64">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Company Info */}
           <div>
