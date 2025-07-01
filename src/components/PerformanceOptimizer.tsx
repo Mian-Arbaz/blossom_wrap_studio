@@ -27,12 +27,12 @@ const PerformanceOptimizer: React.FC = () => {
     };
   }, []);
 
-  useEffect(() => {
-    // Service Worker registration for caching
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('/sw.js').catch(console.error);
-    }
-  }, []);
+  // Service Worker registration removed - not supported in StackBlitz environment
+  // useEffect(() => {
+  //   if ('serviceWorker' in navigator) {
+  //     navigator.serviceWorker.register('/sw.js').catch(console.error);
+  //   }
+  // }, []);
 
   return null;
 };
