@@ -20,6 +20,11 @@ import ContactPage from './pages/ContactPage';
 import AdminPage from './pages/AdminPage';
 import UpcomingProductsPage from './pages/UpcomingProductsPage';
 import WishlistPage from './pages/WishlistPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsOfServicePage from './pages/TermsOfServicePage';
+import ShippingInfoPage from './pages/ShippingInfoPage';
+import ReturnsPage from './pages/ReturnsPage';
+import FAQPage from './pages/FAQPage';
 
 function App() {
   return (
@@ -44,6 +49,11 @@ function App() {
                     <Route path="/admin" element={<AdminPage />} />
                     <Route path="/upcoming" element={<UpcomingProductsPage />} />
                     <Route path="/wishlist" element={<WishlistPage />} />
+                    <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                    <Route path="/terms" element={<TermsOfServicePage />} />
+                    <Route path="/shipping" element={<ShippingInfoPage />} />
+                    <Route path="/returns" element={<ReturnsPage />} />
+                    <Route path="/faq" element={<FAQPage />} />
                   </Routes>
                 </main>
                 <Footer />
