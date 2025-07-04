@@ -131,6 +131,11 @@ const Footer: React.FC = () => {
                       <span>My Wishlist</span>
                     </Link>
                   </li>
+                  <li>
+                    <Link to="/faq" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
+                      <span>FAQ</span>
+                    </Link>
+                  </li>
                 </ul>
               </div>
 
