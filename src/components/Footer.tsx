@@ -168,38 +168,38 @@ const Footer: React.FC = () => {
             </div>
 
             {/* Bottom Section - Copyright & Legal Links */}
-            <div className="border-t border-gray-200 pt-6">
+            <div className="border-t border-gray-200 py-8">
               <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
                 {/* Copyright */}
-                <div className="flex items-center justify-center lg:justify-start space-x-1 text-sm text-gray-600 order-2 lg:order-1">
+                <div className="flex items-center justify-center lg:justify-start space-x-2 text-sm text-gray-600 order-2 lg:order-1">
                   <span>Made with</span>
                   <Heart size={14} className="text-light-pink fill-current" />
                   <span>by Blossom Wrap Studio © 2024</span>
                 </div>
                 
                 {/* Legal Links */}
-                <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-6 text-sm text-gray-600 order-1 lg:order-2">
+                <div className="flex flex-wrap items-center justify-center gap-6 lg:gap-8 text-sm text-gray-600 order-1 lg:order-2">
                   <Link 
                     to="/privacy" 
                     className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
                   >
                     Privacy Policy
                   </Link>
-                  <span className="text-gray-300 hidden sm:inline">•</span>
+                  <span className="text-gray-300 hidden sm:inline text-xs">•</span>
                   <Link 
                     to="/terms" 
                     className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
                   >
                     Terms of Service
                   </Link>
-                  <span className="text-gray-300 hidden sm:inline">•</span>
+                  <span className="text-gray-300 hidden sm:inline text-xs">•</span>
                   <Link 
                     to="/shipping" 
                     className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
                   >
                     Shipping Info
                   </Link>
-                  <span className="text-gray-300 hidden sm:inline">•</span>
+                  <span className="text-gray-300 hidden sm:inline text-xs">•</span>
                   <Link 
                     to="/returns" 
                     className="hover:text-light-pink transition-colors duration-300 hover:underline whitespace-nowrap"
