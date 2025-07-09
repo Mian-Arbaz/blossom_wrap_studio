@@ -25,6 +25,7 @@ import TermsOfServicePage from './pages/TermsOfServicePage';
 import ShippingInfoPage from './pages/ShippingInfoPage';
 import ReturnsPage from './pages/ReturnsPage';
 import FAQPage from './pages/FAQPage';
+import LinkAuditPage from './pages/LinkAuditPage';
 
 function App() {
   return (
@@ -54,6 +55,7 @@ function App() {
                     <Route path="/shipping" element={<ShippingInfoPage />} />
                     <Route path="/returns" element={<ReturnsPage />} />
                     <Route path="/faq" element={<FAQPage />} />
+                    <Route path="/link-audit" element={<LinkAuditPage />} />
                   </Routes>
                 </main>
                 <Footer />
