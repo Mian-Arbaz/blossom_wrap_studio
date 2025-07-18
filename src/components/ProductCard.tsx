@@ -183,14 +183,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) 
           )}
           
           <div className="flex items-center justify-between">
-            <span className="text-lg font-bold text-dark-gray">
+            <span className="text-lg font-bold text-dark-gray dark:text-dark-text-primary">
               PKR {product.price.toLocaleString()}
             </span>
             
             <button
               onClick={handleAddToCart}
               disabled={isAddingToCart || product.isUpcoming || (product.inventory?.remaining === 0)}
-              className="bg-light-pink text-dark-gray px-3 py-2 rounded-full hover:bg-opacity-80 transition-all duration-300 flex items-center space-x-1 font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+              className="bg-light-pink dark:bg-dark-accent-pink text-dark-gray dark:text-dark-surface-primary px-3 py-2 rounded-full hover:bg-opacity-80 dark:hover:bg-opacity-80 transition-all duration-300 flex items-center space-x-1 font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isAddingToCart ? (
                 <LoadingSpinner size="sm" color="border-dark-gray" />

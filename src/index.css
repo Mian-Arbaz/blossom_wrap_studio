@@ -2,6 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Dark theme CSS variables */
+:root {
+  --color-surface-primary: #ffffff;
+  --color-surface-secondary: #f8fafc;
+  --color-text-primary: #1e293b;
+  --color-text-secondary: #64748b;
+}
+
+.dark {
+  --color-surface-primary: #0f172a;
+  --color-surface-secondary: #1e293b;
+  --color-text-primary: #f8fafc;
+  --color-text-secondary: #cbd5e1;
+}
+
 /* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
@@ -11,13 +26,25 @@
   background: #f1f1f1;
 }
 
+.dark ::-webkit-scrollbar-track {
+  background: #334155;
+}
+
 ::-webkit-scrollbar-thumb {
   background: #FADADD;
   border-radius: 3px;
 }
 
+.dark ::-webkit-scrollbar-thumb {
+  background: #f472b6;
+}
+
 ::-webkit-scrollbar-thumb:hover {
   background: #f8b5c1;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #ec4899;
 }
 
 /* Line clamp utility */

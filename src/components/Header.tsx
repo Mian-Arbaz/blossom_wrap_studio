@@ -3,8 +3,10 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Menu, X, User, LogOut, Settings, Package, Search, ShoppingBag, Heart } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useCart } from '../contexts/CartContext';
+import { useTheme } from '../contexts/ThemeContext';
 import SearchBar from './SearchBar';
 import CartSidebar from './CartSidebar';
+import ThemeToggle from './ThemeToggle';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,6 +15,7 @@ const Header: React.FC = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const { user, logout, isAuthenticated, isAdmin } = useAuth();
   const { getTotalItems, wishlistItems } = useCart();
+  const { actualTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -27,7 +30,7 @@ const Header: React.FC = () => {
 
   return (
     <>
-      <header className="bg-white shadow-md relative z-50">
+      <header className="bg-white dark:bg-dark-surface-secondary shadow-md dark:shadow-dark-surface-tertiary relative z-50 transition-colors duration-300">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             {/* Logo */}
@@ -36,24 +39,25 @@ const Header: React.FC = () => {
                 <span className="text-2xl">🌸</span>
               </div>
               <div className="hidden sm:block">
-                <h1 className="font-lora font-bold text-xl text-dark-gray">Blossom Wrap Studio</h1>
-                <p className="text-sm text-gray-600 font-poppins">Makes You Smile</p>
+                <h1 className="font-lora font-bold text-xl text-dark-gray dark:text-dark-text-primary transition-colors duration-300">Blossom Wrap Studio</h1>
+                <p className="text-sm text-gray-600 dark:text-dark-text-secondary font-poppins transition-colors duration-300">Makes You Smile</p>
               </div>
             </Link>
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center space-x-8">
               <Link to="/" className="text-dark-gray hover:text-light-pink transition-colors duration-300 font-medium">
+              <Link to="/" className="text-dark-gray dark:text-dark-text-primary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 font-medium">
                 Home
               </Link>
-              <Link to="/products" className="text-dark-gray hover:text-light-pink transition-colors duration-300 font-medium">
+              <Link to="/products" className="text-dark-gray dark:text-dark-text-primary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 font-medium">
                 All Products
               </Link>
-              <Link to="/contact" className="text-dark-gray hover:text-light-pink transition-colors duration-300 font-medium">
+              <Link to="/contact" className="text-dark-gray dark:text-dark-text-primary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 font-medium">
                 Contact
               </Link>
               {isAuthenticated && (
-                <Link to="/upcoming" className="text-dark-gray hover:text-light-pink transition-colors duration-300 font-medium">
+                <Link to="/upcoming" className="text-dark-gray dark:text-dark-text-primary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 font-medium">
                   Upcoming Products
                 </Link>
               )}
@@ -61,10 +65,13 @@ const Header: React.FC = () => {
 
             {/* Action Buttons */}
             <div className="flex items-center space-x-4">
+              {/* Theme Toggle */}
+              <ThemeToggle />
+              
               {/* Search Button */}
               <button
                 onClick={() => setIsSearchOpen(true)}
-                className="p-2 text-dark-gray hover:text-light-pink transition-colors duration-300"
+                className="p-2 text-dark-gray dark:text-dark-text-primary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300"
                 aria-label="Search"
               >
                 <Search size={20} />
