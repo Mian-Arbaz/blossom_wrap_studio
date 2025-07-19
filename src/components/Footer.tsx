@@ -172,7 +172,8 @@ const Footer: React.FC = () => {
               <div className="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
                 {/* Copyright */}
                 <div className="flex items-center justify-center lg:justify-start space-x-2 text-sm text-gray-600 dark:text-dark-text-secondary order-2 lg:order-1">
-                  <span>Made with 🩷 by Blossom Wrap Studio Copyright 2025</span>
+                  <span>Made with</span>
+                  <Heart size={14} className="text-light-pink dark:text-dark-accent-pink fill-current" />
           {/* Customer Service */}
                 </div>
             <h4 className="font-lora font-semibold text-dark-gray dark:text-dark-text-primary mb-4">Customer Service</h4>
@@ -212,9 +213,8 @@ const Footer: React.FC = () => {
         </div>
       </div>
     </footer>
+  )
   );
 };
 
           {/* Policies */}
-
-export default Footer;
