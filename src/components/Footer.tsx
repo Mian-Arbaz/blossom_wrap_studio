@@ -174,38 +174,36 @@ const Footer: React.FC = () => {
                 <div className="flex items-center justify-center lg:justify-start space-x-2 text-sm text-gray-600 dark:text-dark-text-secondary order-2 lg:order-1">
                   <span>Made with</span>
                   <Heart size={14} className="text-light-pink dark:text-dark-accent-pink fill-current" />
-          {/* Customer Service */}
-                </div>
-            <h4 className="font-lora font-semibold text-dark-gray dark:text-dark-text-primary mb-4">Customer Service</h4>
+                
                 {/* Legal Links */}
                 <div className="flex flex-wrap items-center justify-center gap-6 lg:gap-8 text-sm text-gray-600 dark:text-dark-text-secondary order-1 lg:order-2">
-                <Link to="/about" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                  <span>About Us</span>
-            <h4 className="font-lora font-semibold text-dark-gray dark:text-dark-text-primary mb-4">Policies</h4>
+                  <Link 
+                    to="/privacy" 
+                    className="hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 hover:underline whitespace-nowrap"
                   >
                     Privacy Policy
-                <Link to="/privacy" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                  <span>Privacy Policy</span>
+                  </Link>
+                  <span className="text-gray-300 dark:text-dark-text-tertiary hidden sm:inline text-xs">•</span>
                   <Link 
                     to="/terms" 
                     className="hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 hover:underline whitespace-nowrap"
-                <Link to="/terms" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                  <span>Terms of Service</span>
+                  >
+                    Terms of Service
                   </Link>
-                  <span className="text-gray-300 hidden sm:inline text-xs">•</span>
+                  <span className="text-gray-300 dark:text-dark-text-tertiary hidden sm:inline text-xs">•</span>
                   <Link 
-                <Link to="/refund-policy" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                  <span>Refund Policy</span>
+                    to="/shipping" 
+                    className="hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 hover:underline whitespace-nowrap"
                   >
                     Shipping Info
                   </Link>
-                <Link to="/data-protection" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                  <span>Data Protection</span>
-                </Link>
-              </li>
-              <li>
-                <Link to="/consumer-rights" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                  <span>Consumer Rights</span>
+                  <span className="text-gray-300 dark:text-dark-text-tertiary hidden sm:inline text-xs">•</span>
+                  <Link 
+                    to="/returns" 
+                    className="hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 hover:underline whitespace-nowrap"
+                  >
+                    Returns
+                  </Link>
                 </div>
               </div>
             </div>
@@ -213,7 +211,6 @@ const Footer: React.FC = () => {
         </div>
       </div>
     </footer>
-  )
   );
 };
 
