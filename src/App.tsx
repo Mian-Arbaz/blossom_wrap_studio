@@ -27,6 +27,10 @@ import ShippingInfoPage from './pages/ShippingInfoPage';
 import ReturnsPage from './pages/ReturnsPage';
 import FAQPage from './pages/FAQPage';
 import LinkAuditPage from './pages/LinkAuditPage';
+import AboutUsPage from './pages/AboutUsPage';
+import RefundPolicyPage from './pages/RefundPolicyPage';
+import DataProtectionPage from './pages/DataProtectionPage';
+import ConsumerRightsPage from './pages/ConsumerRightsPage';
 
 function App() {
   return (
@@ -58,10 +62,6 @@ function App() {
                       <Route path="/returns" element={<ReturnsPage />} />
                       <Route path="/faq" element={<FAQPage />} />
                       <Route path="/link-audit" element={<LinkAuditPage />} />
-                      <Route path="/about" element={<AboutUsPage />} />
-                      <Route path="/refund-policy" element={<RefundPolicyPage />} />
-                      <Route path="/data-protection" element={<DataProtectionPage />} />
-                      <Route path="/consumer-rights" element={<ConsumerRightsPage />} />
                     </Routes>
                   </main>
                   <Footer />
