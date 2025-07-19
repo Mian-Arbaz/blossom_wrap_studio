@@ -10,6 +10,7 @@ import Sidebar from './components/Sidebar';
 import WhatsAppButton from './components/WhatsAppButton';
 import Footer from './components/Footer';
 import NotificationToast from './components/NotificationToast';
+import SaleNotificationPopup from './components/SaleNotificationPopup';
 import PerformanceOptimizer from './components/PerformanceOptimizer';
 import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
@@ -62,11 +63,16 @@ function App() {
                       <Route path="/returns" element={<ReturnsPage />} />
                       <Route path="/faq" element={<FAQPage />} />
                       <Route path="/link-audit" element={<LinkAuditPage />} />
+                      <Route path="/about" element={<AboutUsPage />} />
+                      <Route path="/refund-policy" element={<RefundPolicyPage />} />
+                      <Route path="/data-protection" element={<DataProtectionPage />} />
+                      <Route path="/consumer-rights" element={<ConsumerRightsPage />} />
                     </Routes>
                   </main>
                   <Footer />
                   <WhatsAppButton />
                   <NotificationToast />
+                  <SaleNotificationPopup />
                 </div>
               </Router>
             </NotificationProvider>

@@ -43,7 +43,7 @@ const Footer: React.FC = () => {
             </div>
 
             {/* Main Footer Content */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
               {/* Company Info */}
               <div className="space-y-4">
                 <div className="flex items-center space-x-3 mb-4">
@@ -87,14 +87,14 @@ const Footer: React.FC = () => {
                   </a>
                   <a 
                     href="#" 
-                    className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-light-pink hover:bg-light-pink hover:bg-opacity-20 transition-all duration-300 shadow-sm"
+                    className="w-8 h-8 bg-white dark:bg-dark-surface-tertiary rounded-full flex items-center justify-center text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink hover:bg-light-pink dark:hover:bg-dark-accent-pink hover:bg-opacity-20 dark:hover:bg-opacity-20 transition-all duration-300 shadow-sm"
                     aria-label="Instagram"
                   >
                     <Instagram size={16} />
                   </a>
                   <a 
                     href="#" 
-                    className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-gray-600 hover:text-light-pink hover:bg-light-pink hover:bg-opacity-20 transition-all duration-300 shadow-sm"
+                    className="w-8 h-8 bg-white dark:bg-dark-surface-tertiary rounded-full flex items-center justify-center text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink hover:bg-light-pink dark:hover:bg-dark-accent-pink hover:bg-opacity-20 dark:hover:bg-opacity-20 transition-all duration-300 shadow-sm"
                     aria-label="Twitter"
                   >
                     <Twitter size={16} />
@@ -102,38 +102,65 @@ const Footer: React.FC = () => {
                 </div>
               </div>
 
-              {/* Quick Links */}
+              {/* Customer Service */}
               <div>
-                <h4 className="font-lora font-semibold text-dark-gray dark:text-dark-text-primary mb-4">Quick Links</h4>
+                <h4 className="font-lora font-semibold text-dark-gray dark:text-dark-text-primary mb-4">Customer Service</h4>
                 <ul className="space-y-3">
                   <li>
-                    <Link to="/" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                      <span>Home</span>
+                    <Link to="/about" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      About Us
                     </Link>
                   </li>
                   <li>
-                    <Link to="/contact" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                      <span>Contact Us</span>
+                    <Link to="/contact" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      Contact Us
                     </Link>
                   </li>
                   <li>
-                    <Link to="/products/handmade-flowers" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                      <span>Handmade Flowers</span>
+                    <Link to="/returns" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      Returns
                     </Link>
                   </li>
                   <li>
-                    <Link to="/products/gift-packs" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                      <span>Gift Packs</span>
+                    <Link to="/shipping" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      Shipping Info
                     </Link>
                   </li>
                   <li>
-                    <Link to="/wishlist" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                      <span>My Wishlist</span>
+                    <Link to="/faq" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      FAQ
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Policies */}
+              <div>
+                <h4 className="font-lora font-semibold text-dark-gray dark:text-dark-text-primary mb-4">Policies</h4>
+                <ul className="space-y-3">
+                  <li>
+                    <Link to="/privacy" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      Privacy Policy
                     </Link>
                   </li>
                   <li>
-                    <Link to="/faq" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                      <span>FAQ</span>
+                    <Link to="/terms" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      Terms of Service
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/refund-policy" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      Refund Policy
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/data-protection" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      Data Protection
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/consumer-rights" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      Consumer Rights
                     </Link>
                   </li>
                 </ul>
@@ -144,23 +171,28 @@ const Footer: React.FC = () => {
                 <h4 className="font-lora font-semibold text-dark-gray dark:text-dark-text-primary mb-4">Categories</h4>
                 <ul className="space-y-3">
                   <li>
-                    <Link to="/products/calligraphy" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                      <span>Calligraphy</span>
+                    <Link to="/products/handmade-flowers" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      Handmade Flowers
                     </Link>
                   </li>
                   <li>
-                    <Link to="/products/birthday-gifts" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                      <span>Birthday Gifts</span>
+                    <Link to="/products/gift-packs" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      Gift Packs
                     </Link>
                   </li>
                   <li>
-                    <Link to="/products/couple-gifts" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                      <span>Couple Gifts</span>
+                    <Link to="/products/calligraphy" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      Calligraphy
                     </Link>
                   </li>
                   <li>
-                    <Link to="/products/gift-packing" className="text-gray-600 hover:text-light-pink transition-colors duration-300 text-sm flex items-center space-x-2">
-                      <span>Gift Packing</span>
+                    <Link to="/products/birthday-gifts" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      Birthday Gifts
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/products/couple-gifts" className="text-gray-600 dark:text-dark-text-secondary hover:text-light-pink dark:hover:text-dark-accent-pink transition-colors duration-300 text-sm">
+                      Couple Gifts
                     </Link>
                   </li>
                 </ul>
@@ -174,6 +206,8 @@ const Footer: React.FC = () => {
                 <div className="flex items-center justify-center lg:justify-start space-x-2 text-sm text-gray-600 dark:text-dark-text-secondary order-2 lg:order-1">
                   <span>Made with</span>
                   <Heart size={14} className="text-light-pink dark:text-dark-accent-pink fill-current" />
+                  <span>by Blossom Wrap Studio Copyright 2025</span>
+                </div>
                 
                 {/* Legal Links */}
                 <div className="flex flex-wrap items-center justify-center gap-6 lg:gap-8 text-sm text-gray-600 dark:text-dark-text-secondary order-1 lg:order-2">
@@ -214,6 +248,4 @@ const Footer: React.FC = () => {
   );
 };
 
-          {/* Policies */}
-  )
-}
+export default Footer;
