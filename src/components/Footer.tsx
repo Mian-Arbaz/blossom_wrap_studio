@@ -215,3 +215,5 @@ const Footer: React.FC = () => {
 };
 
           {/* Policies */}
+  )
+}
