@@ -67,6 +67,7 @@ function App() {
                       <Route path="/refund-policy" element={<RefundPolicyPage />} />
                       <Route path="/data-protection" element={<DataProtectionPage />} />
                       <Route path="/consumer-rights" element={<ConsumerRightsPage />} />
+                      <Route path="/link-audit" element={<LinkAuditPage />} />
                     </Routes>
                   </main>
                   <Footer />
