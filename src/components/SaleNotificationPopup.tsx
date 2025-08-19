@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { X, ShoppingBag } from 'lucide-react';
 
+import { safeGet } from '../utils/safeStorage';
+
 interface SaleNotification {
   id: string;
   customerName: string;
@@ -8,13 +10,12 @@ interface SaleNotification {
   productName: string;
   timeAgo: string;
 }
-
 const SaleNotificationPopup: React.FC = () => {
   const [currentNotification, setCurrentNotification] = useState<SaleNotification | null>(null);
   const [isVisible, setIsVisible] = useState(false);
 
   // Sample data for notifications
-  const sampleNotifications: Omit<SaleNotification, 'id'>[] = [
+  const sampleNotifications: Array<Omit<SaleNotification, 'id'>> = [
     { customerName: 'Areeba', location: 'Lahore', productName: 'Elegant Rose Bouquet', timeAgo: '2 hours ago' },
     { customerName: 'Muhammad Ali', location: 'Karachi', productName: 'Premium Gift Box Set', timeAgo: '3 minutes ago' },
     { customerName: 'Fatima', location: 'Islamabad', productName: 'Custom Calligraphy Art', timeAgo: '1 hour ago' },
@@ -31,7 +32,7 @@ const SaleNotificationPopup: React.FC = () => {
 
   const getRandomNotification = (): SaleNotification => {
     const randomIndex = Math.floor(Math.random() * sampleNotifications.length);
-    const notification = sampleNotifications[randomIndex];
+    const notification = sampleNotifications[randomIndex]!;
     return {
       ...notification,
       id: Date.now().toString() + Math.random().toString(36).substr(2, 9)
@@ -57,6 +58,10 @@ const SaleNotificationPopup: React.FC = () => {
   };
 
   useEffect(() => {
+    // Don't show notifications if user has disabled them
+    const notificationsEnabled = safeGet('notifications_enabled', true);
+    if (!notificationsEnabled) return;
+
     // Show first notification after 10 seconds
     const initialTimer = setTimeout(() => {
       showNotification();

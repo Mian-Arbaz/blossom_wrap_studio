@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Search, ShoppingCart, Heart, User } from 'lucide-react';
+import { Menu, X, Search, ShoppingCart, Heart, User, LogOut } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useTheme } from '../contexts/ThemeContext';
 import ThemeToggle from './ThemeToggle';
-import SearchBar from './SearchBar';
+import CartSidebar from './CartSidebar';
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const { cartItems } = useCart();
   const { user, logout } = useAuth();
   const location = useLocation();
@@ -92,11 +94,45 @@ const Header: React.FC = () => {
 
             {/* User Menu */}
             {user ? (
-              <div className="relative">
-                <button className="flex items-center space-x-2 text-gray-700 dark:text-dark-text-secondary hover:text-pink-600 dark:hover:text-dark-accent-pink transition-colors duration-200">
+              <div className="relative" onBlur={() => setTimeout(() => setIsUserMenuOpen(false), 150)}>
+                <button 
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  className="flex items-center space-x-2 text-gray-700 dark:text-dark-text-secondary hover:text-pink-600 dark:hover:text-dark-accent-pink transition-colors duration-200"
+                >
                   <User className="w-5 h-5" />
                   <span className="hidden sm:block text-sm">{user.name}</span>
                 </button>
+                
+                {isUserMenuOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-dark-surface-secondary rounded-lg shadow-lg border border-gray-200 dark:border-dark-surface-tertiary py-2 z-50">
+                    {user.isAdmin && (
+                      <Link
+                        to="/admin"
+                        className="block px-4 py-2 text-sm text-gray-700 dark:text-dark-text-secondary hover:bg-gray-100 dark:hover:bg-dark-surface-tertiary transition-colors duration-200"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        Admin Panel
+                      </Link>
+                    )}
+                    <Link
+                      to="/wishlist"
+                      className="block px-4 py-2 text-sm text-gray-700 dark:text-dark-text-secondary hover:bg-gray-100 dark:hover:bg-dark-surface-tertiary transition-colors duration-200"
+                      onClick={() => setIsUserMenuOpen(false)}
+                    >
+                      My Wishlist
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsUserMenuOpen(false);
+                      }}
+                      className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-dark-text-secondary hover:bg-gray-100 dark:hover:bg-dark-surface-tertiary transition-colors duration-200 flex items-center space-x-2"
+                    >
+                      <LogOut size={16} />
+                      <span>Sign Out</span>
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="hidden sm:flex items-center space-x-2">
@@ -129,7 +165,15 @@ const Header: React.FC = () => {
         {/* Search Bar */}
         {isSearchOpen && (
           <div className="py-4 border-t border-gray-200 dark:border-dark-surface-tertiary">
-            <SearchBar onClose={() => setIsSearchOpen(false)} />
+            <div className="relative">
+              <Search size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search products..."
+                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent"
+                autoFocus
+              />
+            </div>
           </div>
         )}
 
@@ -162,10 +206,14 @@ const Header: React.FC = () => {
                   </Link>
                   <Link
                     to="/register"
-                    className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-dark-text-secondary hover:text-pink-600 dark:hover:text-dark-accent-pink hover:bg-gray-50 dark:hover:bg-dark-surface-secondary transition-colors duration-200"
+            <button 
+              onClick={() => setIsCartOpen(true)}
+              className="relative p-2 text-gray-600 dark:text-dark-text-secondary hover:text-pink-600 dark:hover:text-dark-accent-pink transition-colors duration-200"
+              aria-label="Shopping cart"
+            >
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Register
+                <span className="absolute -top-1 -right-1 bg-brand-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-medium">
                   </Link>
                 </div>
               )}
@@ -173,6 +221,9 @@ const Header: React.FC = () => {
           </div>
         )}
       </div>
+      
+      {/* Cart Sidebar */}
+      <CartSidebar isOpen={isCartOpen} onClose={() => setIsCartOpen(false)} />
     </header>
   );
 };

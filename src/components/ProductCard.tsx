@@ -5,7 +5,7 @@ import { Product } from '../data/products';
 import { useCart } from '../contexts/CartContext';
 import { useNotification } from '../contexts/NotificationContext';
 import LoadingSpinner from './LoadingSpinner';
-import OptimizedImage from './OptimizedImage';
+import { formatPrice } from '../utils/currency';
 
 interface ProductCardProps {
   product: Product;
@@ -92,14 +92,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) 
     <Link to={`/product/${product.id}`} className="block">
       <div className="bg-white rounded-lg shadow-md overflow-hidden group hover:shadow-xl transition-all duration-300 animate-fade-in transform hover:scale-105">
         <div className="relative overflow-hidden h-48">
-          <OptimizedImage
+          <img
             src={product.image}
             alt={product.name}
-            className="w-full h-full"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             width={400}
             height={300}
-            priority={priority}
-            placeholder={placeholder}
+            loading={priority ? 'eager' : 'lazy'}
           />
           
           {/* Badges */}
@@ -184,7 +183,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) 
           
           <div className="flex items-center justify-between">
             <span className="text-lg font-bold text-dark-gray dark:text-dark-text-primary">
-              PKR {product.price.toLocaleString()}
+              {formatPrice(product.price)}
             </span>
             
             <button

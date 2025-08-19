@@ -1,3 +1,5 @@
+import { safeGet, safeSet } from '../utils/safeStorage';
+
 export interface Product {
   id: string;
   name: string;
@@ -255,33 +257,12 @@ export const mockProducts: Product[] = [
 ];
 
 // Initialize products in localStorage if not exists
-if (typeof window !== 'undefined' && !localStorage.getItem('products')) {
-  localStorage.setItem('products', JSON.stringify(mockProducts));
+if (typeof window !== 'undefined' && !safeGet('products', null)) {
+  safeSet('products', mockProducts);
 }
 
-// Safe localStorage operations
-const safeLocalStorage = {
-  getItem: (key: string): string | null => {
-    try {
-      return typeof window !== 'undefined' ? localStorage.getItem(key) : null;
-    } catch {
-      return null;
-    }
-  },
-  setItem: (key: string, value: string): void => {
-    try {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem(key, value);
-      }
-    } catch {
-      // Handle storage errors silently
-    }
-  }
-};
-
 export const getProducts = (): Product[] => {
-  const stored = safeLocalStorage.getItem('products');
-  return stored ? JSON.parse(stored) : mockProducts;
+  return safeGet('products', mockProducts);
 };
 
 export const getAllProducts = (): Product[] => {
@@ -324,7 +305,7 @@ export const addProduct = (product: Omit<Product, 'id'>): Product => {
     rating: product.rating || { average: 0, count: 0 }
   };
   products.push(newProduct);
-  safeLocalStorage.setItem('products', JSON.stringify(products));
+  safeSet('products', products);
   return newProduct;
 };
 
@@ -333,7 +314,7 @@ export const updateProduct = (id: string, updatedProduct: Partial<Product>): boo
   const index = products.findIndex(product => product.id === id);
   if (index !== -1) {
     products[index] = { ...products[index], ...updatedProduct };
-    safeLocalStorage.setItem('products', JSON.stringify(products));
+    safeSet('products', products);
     return true;
   }
   return false;
@@ -343,7 +324,7 @@ export const deleteProduct = (id: string): boolean => {
   const products = getProducts();
   const filteredProducts = products.filter(product => product.id !== id);
   if (filteredProducts.length !== products.length) {
-    safeLocalStorage.setItem('products', JSON.stringify(filteredProducts));
+    safeSet('products', filteredProducts);
     return true;
   }
   return false;
@@ -383,7 +364,7 @@ export const updateInventory = (id: string, remaining: number): boolean => {
   const index = products.findIndex(product => product.id === id);
   if (index !== -1 && products[index].inventory) {
     products[index].inventory!.remaining = Math.max(0, remaining);
-    safeLocalStorage.setItem('products', JSON.stringify(products));
+    safeSet('products', products);
     return true;
   }
   return false;

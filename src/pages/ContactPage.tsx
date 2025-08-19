@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, MessageCircle, Clock, CheckCircle, AlertCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Mail, Phone, MapPin, Send, MessageCircle, Clock, CheckCircle, AlertCircle, ArrowLeft } from 'lucide-react';
 import { useNotification } from '../contexts/NotificationContext';
+import { openWhatsAppChat, buildWhatsAppInquiryMessage } from '../utils/whatsapp';
+import { Button } from '../components/ui/Button';
+import { Input } from '../components/ui/Input';
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/Card';
 
 const ContactPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -107,9 +112,8 @@ const ContactPage: React.FC = () => {
   };
 
   const handleWhatsAppClick = () => {
-    const message = 'Hi! I would like to know more about your products and services.';
-    const whatsappUrl = `https://wa.me/+923001234567?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    const message = buildWhatsAppInquiryMessage();
+    openWhatsAppChat(message);
   };
 
   const subjectOptions = [
@@ -125,18 +129,28 @@ const ContactPage: React.FC = () => {
   ];
 
   return (
-    <div className="lg:ml-64 min-h-screen bg-gray-50">
+    <div className="lg:ml-64 min-h-screen bg-gray-25">
       {/* Hero Section */}
-      <section className="bg-white">
+      <section className="bg-white border-b border-gray-100">
+        <div className="container mx-auto px-4 py-8">
+          <Link
+            to="/"
+            className="inline-flex items-center space-x-2 text-gray-600 hover:text-brand-600 transition-colors duration-300 mb-6"
+          >
+            <ArrowLeft size={20} />
+            <span>Back to Home</span>
+          </Link>
+        </div>
+        
         <div className="container mx-auto px-4 py-16">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-light-pink to-light-blue rounded-full mb-6">
-              <MessageCircle size={32} className="text-dark-gray" />
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-brand-500 to-accent-500 rounded-2xl mb-8 shadow-lg">
+              <MessageCircle size={36} className="text-white" />
             </div>
-            <h1 className="font-lora text-4xl md:text-5xl font-bold text-dark-gray mb-6">
+            <h1 className="font-serif text-4xl md:text-6xl font-bold text-gray-900 mb-6 tracking-tight">
               Get in Touch
             </h1>
-            <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed">
               We'd love to hear from you! Whether you have questions about our handmade products, 
               need a custom order, or just want to say hello, we're here to help.
             </p>
@@ -145,30 +159,30 @@ const ContactPage: React.FC = () => {
       </section>
 
       {/* Main Content */}
-      <section className="py-16">
+      <section className="py-20">
         <div className="container mx-auto px-4">
-          <div className="max-w-6xl mx-auto">
+          <div className="max-w-7xl mx-auto">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
               
               {/* Contact Form - Takes 2/3 width on desktop */}
               <div className="lg:col-span-2">
-                <div className="bg-white rounded-2xl shadow-lg p-8 md:p-10">
+                <Card variant="elevated" padding="lg">
                   <div className="mb-8">
-                    <h2 className="font-lora text-2xl md:text-3xl font-bold text-dark-gray mb-3">
+                    <h2 className="font-serif text-3xl font-bold text-gray-900 mb-4">
                       Send us a Message
                     </h2>
-                    <p className="text-gray-600">
+                    <p className="text-gray-600 text-lg">
                       Fill out the form below and we'll get back to you as soon as possible.
                     </p>
                   </div>
                   
                   {/* Success Message */}
                   {submitStatus === 'success' && (
-                    <div className="mb-8 p-4 bg-green-50 border border-green-200 rounded-xl flex items-start space-x-3">
-                      <CheckCircle size={20} className="text-green-600 flex-shrink-0 mt-0.5" />
+                    <div className="mb-8 p-6 bg-success-50 border border-success-200 rounded-xl flex items-start space-x-4">
+                      <CheckCircle size={24} className="text-success-600 flex-shrink-0 mt-1" />
                       <div>
-                        <h3 className="font-semibold text-green-800">Message Sent Successfully!</h3>
-                        <p className="text-green-700 text-sm mt-1">
+                        <h3 className="font-semibold text-success-800 text-lg">Message Sent Successfully!</h3>
+                        <p className="text-success-700 mt-1">
                           Thank you for contacting us. We'll respond within 24 hours.
                         </p>
                       </div>
@@ -178,59 +192,28 @@ const ContactPage: React.FC = () => {
                   <form onSubmit={handleSubmit} className="space-y-6">
                     {/* Name and Email Row */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <label htmlFor="name" className="block text-sm font-semibold text-dark-gray mb-2">
-                          Full Name *
-                        </label>
-                        <input
-                          type="text"
-                          id="name"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none focus:ring-0 ${
-                            fieldErrors.name 
-                              ? 'border-red-300 focus:border-red-500 bg-red-50' 
-                              : 'border-gray-200 focus:border-light-pink bg-white hover:border-gray-300'
-                          }`}
-                          placeholder="Enter your full name"
-                          required
-                        />
-                        {fieldErrors.name && (
-                          <p className="mt-2 text-sm text-red-600 flex items-center space-x-1">
-                            <AlertCircle size={14} />
-                            <span>{fieldErrors.name}</span>
-                          </p>
-                        )}
-                      </div>
+                      <Input
+                        label="Full Name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={fieldErrors.name}
+                        placeholder="Enter your full name"
+                        required
+                      />
 
-                      <div>
-                        <label htmlFor="email" className="block text-sm font-semibold text-dark-gray mb-2">
-                          Email Address *
-                        </label>
-                        <input
-                          type="email"
-                          id="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={`w-full px-4 py-3 border-2 rounded-xl transition-all duration-300 focus:outline-none focus:ring-0 ${
-                            fieldErrors.email 
-                              ? 'border-red-300 focus:border-red-500 bg-red-50' 
-                              : 'border-gray-200 focus:border-light-pink bg-white hover:border-gray-300'
-                          }`}
-                          placeholder="your.email@example.com"
-                          required
-                        />
-                        {fieldErrors.email && (
-                          <p className="mt-2 text-sm text-red-600 flex items-center space-x-1">
-                            <AlertCircle size={14} />
-                            <span>{fieldErrors.email}</span>
-                          </p>
-                        )}
-                      </div>
+                      <Input
+                        label="Email Address"
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        error={fieldErrors.email}
+                        placeholder="your.email@example.com"
+                        required
+                      />
                     </div>
 
                     {/* Subject */}
@@ -298,124 +281,126 @@ const ContactPage: React.FC = () => {
 
                     {/* Submit Button */}
                     <div className="pt-4">
-                      <button
+                      <Button
                         type="submit"
+                        size="lg"
+                        loading={isSubmitting}
+                        loadingText="Sending Message..."
                         disabled={isSubmitting}
-                        className="w-full bg-gradient-to-r from-light-pink to-light-blue text-dark-gray py-4 px-8 rounded-xl font-semibold text-lg hover:shadow-lg hover:scale-[1.02] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center space-x-3"
+                        className="w-full bg-gradient-to-r from-brand-600 to-accent-600 hover:from-brand-700 hover:to-accent-700 transform hover:scale-[1.02]"
                       >
-                        {isSubmitting ? (
-                          <>
-                            <div className="w-5 h-5 border-2 border-dark-gray border-t-transparent rounded-full animate-spin"></div>
-                            <span>Sending Message...</span>
-                          </>
-                        ) : (
-                          <>
-                            <Send size={20} />
-                            <span>Send Message</span>
-                          </>
-                        )}
-                      </button>
+                        <Send size={20} />
+                        <span>Send Message</span>
+                      </Button>
                     </div>
                   </form>
-                </div>
+                </Card>
               </div>
 
               {/* Contact Information Sidebar */}
               <div className="space-y-8">
                 {/* Contact Details */}
-                <div className="bg-white rounded-2xl shadow-lg p-8">
-                  <h3 className="font-lora text-xl font-bold text-dark-gray mb-6">
+                <Card variant="elevated" padding="lg">
+                  <CardHeader>
+                    <CardTitle>Contact Information</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
                     Contact Information
-                  </h3>
-                  
                   <div className="space-y-6">
                     <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-r from-light-pink to-light-blue rounded-xl flex items-center justify-center flex-shrink-0">
-                        <Phone size={20} className="text-dark-gray" />
+                      <div className="w-12 h-12 bg-gradient-to-r from-brand-500 to-accent-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <Phone size={20} className="text-white" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-dark-gray mb-1">Phone</h4>
+                        <h4 className="font-semibold text-gray-900 mb-1">Phone</h4>
                         <p className="text-gray-600 mb-1">+92 300 1234567</p>
                         <p className="text-sm text-gray-500">Mon-Sat, 9 AM - 8 PM</p>
                       </div>
                     </div>
 
                     <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-r from-light-pink to-light-blue rounded-xl flex items-center justify-center flex-shrink-0">
-                        <Mail size={20} className="text-dark-gray" />
+                      <div className="w-12 h-12 bg-gradient-to-r from-brand-500 to-accent-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <Mail size={20} className="text-white" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-dark-gray mb-1">Email</h4>
+                        <h4 className="font-semibold text-gray-900 mb-1">Email</h4>
                         <p className="text-gray-600 mb-1">info@blossomwrap.com</p>
                         <p className="text-sm text-gray-500">Response within 24 hours</p>
                       </div>
                     </div>
 
                     <div className="flex items-start space-x-4">
-                      <div className="w-12 h-12 bg-gradient-to-r from-light-pink to-light-blue rounded-xl flex items-center justify-center flex-shrink-0">
-                        <MapPin size={20} className="text-dark-gray" />
+                      <div className="w-12 h-12 bg-gradient-to-r from-brand-500 to-accent-500 rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm">
+                        <MapPin size={20} className="text-white" />
                       </div>
                       <div>
-                        <h4 className="font-semibold text-dark-gray mb-1">Location</h4>
+                        <h4 className="font-semibold text-gray-900 mb-1">Location</h4>
                         <p className="text-gray-600 mb-1">Lahore, Pakistan</p>
                         <p className="text-sm text-gray-500">Serving nationwide</p>
                       </div>
                     </div>
                   </div>
-                </div>
+                  </CardContent>
+                </Card>
 
                 {/* WhatsApp CTA */}
-                <div className="bg-gradient-to-r from-green-50 to-green-100 border border-green-200 rounded-2xl p-8">
-                  <div className="text-center">
+                <Card className="bg-gradient-to-r from-success-50 to-success-100 border-success-200">
+                  <CardContent className="text-center p-8">
                     <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
                       <MessageCircle size={24} className="text-white" />
                     </div>
-                    <h3 className="font-lora text-lg font-bold text-green-800 mb-2">
+                    <h3 className="font-serif text-xl font-bold text-success-800 mb-3">
                       Need Quick Help?
                     </h3>
-                    <p className="text-green-700 mb-6 text-sm">
+                    <p className="text-success-700 mb-6">
                       Get instant support through WhatsApp for urgent inquiries
                     </p>
-                    <button
+                    <Button
                       onClick={handleWhatsAppClick}
-                      className="w-full bg-green-500 text-white py-3 px-6 rounded-xl font-semibold hover:bg-green-600 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 flex items-center justify-center space-x-2"
+                      variant="success"
+                      size="lg"
+                      className="w-full transform hover:scale-[1.02]"
                     >
                       <MessageCircle size={18} />
                       <span>Chat on WhatsApp</span>
-                    </button>
-                  </div>
-                </div>
+                    </Button>
+                  </CardContent>
+                </Card>
 
                 {/* Business Hours */}
-                <div className="bg-white rounded-2xl shadow-lg p-8">
-                  <div className="flex items-center space-x-3 mb-6">
-                    <Clock size={20} className="text-light-pink" />
-                    <h3 className="font-lora text-lg font-bold text-dark-gray">
+                <Card variant="elevated" padding="lg">
+                  <CardHeader>
+                    <CardTitle className="flex items-center space-x-3">
+                      <Clock size={20} className="text-brand-600" />
+                      <span>
                       Business Hours
-                    </h3>
-                  </div>
+                      </span>
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
                   
                   <div className="space-y-3">
-                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                      <span className="text-gray-600 font-medium">Monday - Friday</span>
-                      <span className="text-dark-gray font-semibold">9:00 AM - 8:00 PM</span>
+                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                      <span className="text-gray-700 font-medium">Monday - Friday</span>
+                      <span className="text-gray-900 font-semibold">9:00 AM - 8:00 PM</span>
                     </div>
-                    <div className="flex justify-between items-center py-2 border-b border-gray-100">
-                      <span className="text-gray-600 font-medium">Saturday</span>
-                      <span className="text-dark-gray font-semibold">10:00 AM - 6:00 PM</span>
+                    <div className="flex justify-between items-center py-3 border-b border-gray-100">
+                      <span className="text-gray-700 font-medium">Saturday</span>
+                      <span className="text-gray-900 font-semibold">10:00 AM - 6:00 PM</span>
                     </div>
-                    <div className="flex justify-between items-center py-2">
-                      <span className="text-gray-600 font-medium">Sunday</span>
-                      <span className="text-red-500 font-semibold">Closed</span>
+                    <div className="flex justify-between items-center py-3">
+                      <span className="text-gray-700 font-medium">Sunday</span>
+                      <span className="text-danger-500 font-semibold">Closed</span>
                     </div>
                   </div>
                   
-                  <div className="mt-6 p-4 bg-light-pink bg-opacity-20 rounded-xl">
-                    <p className="text-sm text-dark-gray text-center">
+                  <div className="mt-6 p-4 bg-brand-50 rounded-xl">
+                    <p className="text-sm text-gray-700 text-center font-medium">
                       <strong>Average Response Time:</strong> Within 2 hours during business hours
                     </p>
                   </div>
-                </div>
+                  </CardContent>
+                </Card>
               </div>
             </div>
           </div>
@@ -423,45 +408,53 @@ const ContactPage: React.FC = () => {
       </section>
 
       {/* FAQ Section */}
-      <section className="py-16 bg-white">
+      <section className="py-20 bg-white border-t border-gray-100">
         <div className="container mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="font-lora text-3xl font-bold text-dark-gray mb-4">
+            <h2 className="font-serif text-3xl md:text-4xl font-bold text-gray-900 mb-6">
               Frequently Asked Questions
             </h2>
-            <p className="text-gray-600 mb-8">
+            <p className="text-xl text-gray-600 mb-12">
               Find quick answers to common questions, or contact us for personalized assistance.
             </p>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-              <div className="bg-gray-50 rounded-xl p-6">
-                <h3 className="font-semibold text-dark-gray mb-2">How long does delivery take?</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+              <Card className="bg-gray-50 border-gray-200">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">How long does delivery take?</h3>
                 <p className="text-gray-600 text-sm">Standard delivery takes 3-5 business days across Pakistan. Express delivery is available for major cities.</p>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-6">
-                <h3 className="font-semibold text-dark-gray mb-2">Do you offer custom orders?</h3>
+                </CardContent>
+              </Card>
+              <Card className="bg-gray-50 border-gray-200">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">Do you offer custom orders?</h3>
                 <p className="text-gray-600 text-sm">Yes! We specialize in custom handmade items. Contact us with your requirements for a personalized quote.</p>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-6">
-                <h3 className="font-semibold text-dark-gray mb-2">What payment methods do you accept?</h3>
+                </CardContent>
+              </Card>
+              <Card className="bg-gray-50 border-gray-200">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">What payment methods do you accept?</h3>
                 <p className="text-gray-600 text-sm">We accept Cash on Delivery, bank transfers, JazzCash, Easypaisa, and online payment gateways.</p>
-              </div>
-              <div className="bg-gray-50 rounded-xl p-6">
-                <h3 className="font-semibold text-dark-gray mb-2">Can I return items?</h3>
+                </CardContent>
+              </Card>
+              <Card className="bg-gray-50 border-gray-200">
+                <CardContent className="p-6">
+                  <h3 className="font-semibold text-gray-900 mb-3">Can I return items?</h3>
                 <p className="text-gray-600 text-sm">Yes, we offer a 7-day return policy for most items. Custom orders cannot be returned unless defective.</p>
-              </div>
+                </CardContent>
+              </Card>
             </div>
             
-            <div className="mt-8">
-              <a
-                href="/faq"
-                className="inline-flex items-center space-x-2 text-light-pink hover:text-dark-gray transition-colors duration-300 font-medium"
+            <div className="mt-12">
+              <Link
+                to="/faq"
+                className="inline-flex items-center space-x-2 text-brand-600 hover:text-brand-700 transition-colors duration-300 font-semibold text-lg"
               >
                 <span>View All FAQs</span>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                 </svg>
-              </a>
+              </Link>
             </div>
           </div>
         </div>

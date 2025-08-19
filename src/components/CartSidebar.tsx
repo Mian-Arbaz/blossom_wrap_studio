@@ -3,6 +3,8 @@ import { X, Plus, Minus, ShoppingBag, Heart } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../contexts/CartContext';
 import { useNotification } from '../contexts/NotificationContext';
+import { openWhatsAppChat, buildWhatsAppOrderMessage } from '../utils/whatsapp';
+import { formatPrice } from '../utils/currency';
 
 interface CartSidebarProps {
   isOpen: boolean;
@@ -16,15 +18,17 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
   const handleWhatsAppOrder = () => {
     if (cartItems.length === 0) return;
 
-    const orderDetails = cartItems.map(item => 
-      `${item.name} x${item.quantity} - PKR ${(item.price * item.quantity).toLocaleString()}`
-    ).join('\n');
-    
-    const total = getTotalPrice();
-    const message = `Hi! I'd like to place an order:\n\n${orderDetails}\n\nTotal: PKR ${total.toLocaleString()}\n\nPlease confirm availability and delivery details.`;
-    
-    const whatsappUrl = `https://wa.me/+923001234567?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
+    const orderData = {
+      items: cartItems.map(item => ({
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price
+      })),
+      total: getTotalPrice()
+    };
+
+    const message = buildWhatsAppOrderMessage(orderData);
+    openWhatsAppChat(message);
     
     addNotification({
       type: 'success',
@@ -94,6 +98,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
                       <div className="flex-1">
                         <h3 className="font-medium text-dark-gray mb-1">{item.name}</h3>
                         <p className="text-sm text-gray-600 mb-2">PKR {item.price.toLocaleString()}</p>
+                       <p className="text-sm text-gray-600 mb-2">{formatPrice(item.price)}</p>
                         
                         {/* Quantity Controls */}
                         <div className="flex items-center justify-between">
@@ -132,7 +137,7 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose }) => {
             <div className="border-t border-gray-200 p-4 space-y-4">
               <div className="flex items-center justify-between text-lg font-semibold">
                 <span>Total:</span>
-                <span>PKR {getTotalPrice().toLocaleString()}</span>
+                <span>{formatPrice(getTotalPrice())}</span>
               </div>
               <button
                 onClick={handleWhatsAppOrder}

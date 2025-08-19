@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { safeGet, safeSet, safeRemove } from '../utils/safeStorage';
 
 interface User {
   id: string;
@@ -30,21 +31,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
+    const savedUser = safeGet<User | null>('user', null);
     if (savedUser) {
-      setUser(JSON.parse(savedUser));
+      setUser(savedUser);
     }
   }, []);
 
   const login = async (email: string, password: string): Promise<boolean> => {
     // Mock authentication
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const users = safeGet<any[]>('users', []);
     const foundUser = users.find((u: any) => u.email === email && u.password === password);
     
     if (foundUser) {
       const { password: _, ...userWithoutPassword } = foundUser;
       setUser(userWithoutPassword);
-      localStorage.setItem('user', JSON.stringify(userWithoutPassword));
+      safeSet('user', userWithoutPassword);
       return true;
     }
     
@@ -57,7 +58,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isAdmin: true
       };
       setUser(adminUser);
-      localStorage.setItem('user', JSON.stringify(adminUser));
+      safeSet('user', adminUser);
       return true;
     }
     
@@ -65,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const register = async (name: string, email: string, password: string): Promise<boolean> => {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
+    const users = safeGet<any[]>('users', []);
     
     // Check if user already exists
     if (users.find((u: any) => u.email === email)) {
@@ -81,19 +82,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
     
     users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
+    safeSet('users', users);
     
     // Auto login after registration
     const { password: _, ...userWithoutPassword } = newUser;
     setUser(userWithoutPassword);
-    localStorage.setItem('user', JSON.stringify(userWithoutPassword));
+    safeSet('user', userWithoutPassword);
     
     return true;
   };
 
   const logout = () => {
     setUser(null);
-    localStorage.removeItem('user');
+    safeRemove('user');
   };
 
   const value = {

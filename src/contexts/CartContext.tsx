@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product } from '../data/products';
+import { safeGet, safeSet } from '../utils/safeStorage';
 
 interface CartItem extends Product {
   quantity: number;
@@ -34,23 +35,16 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [wishlistItems, setWishlistItems] = useState<Product[]>([]);
 
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    const savedWishlist = localStorage.getItem('wishlist');
-    
-    if (savedCart) {
-      setCartItems(JSON.parse(savedCart));
-    }
-    if (savedWishlist) {
-      setWishlistItems(JSON.parse(savedWishlist));
-    }
+    setCartItems(safeGet('cart', []));
+    setWishlistItems(safeGet('wishlist', []));
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(cartItems));
+    safeSet('cart', cartItems);
   }, [cartItems]);
 
   useEffect(() => {
-    localStorage.setItem('wishlist', JSON.stringify(wishlistItems));
+    safeSet('wishlist', wishlistItems);
   }, [wishlistItems]);
 
   const addToCart = (product: Product, quantity: number = 1) => {
