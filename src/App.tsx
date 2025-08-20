@@ -5,7 +5,7 @@ import { CartProvider } from './contexts/CartContext';
 import { ComparisonProvider } from './contexts/ComparisonContext';
 import { NotificationProvider } from './contexts/NotificationContext';
 import { ThemeProvider } from './contexts/ThemeContext';
-import Header from './components/Header';
+import { Header } from './components/Header';
 import Sidebar from './components/Sidebar';
 import WhatsAppButton from './components/WhatsAppButton';
 import Footer from './components/Footer';

@@ -3,8 +3,8 @@ import { Link, useLocation } from 'react-router-dom';
 import { ShoppingBag, Heart, User, Menu, X, Search } from 'lucide-react';
 import { useCart } from '../contexts/CartContext';
 import { useAuth } from '../contexts/AuthContext';
-import { ThemeToggle } from './ThemeToggle';
-import { SearchBar } from './SearchBar';
+import ThemeToggle from './ThemeToggle';
+import SearchBar from './SearchBar';
 
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
