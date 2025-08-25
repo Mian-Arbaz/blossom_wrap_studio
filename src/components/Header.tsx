@@ -9,11 +9,11 @@ import SearchBar from './SearchBar';
 export const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const { items } = useCart();
+  const { cartItems } = useCart();
   const { user, logout } = useAuth();
   const location = useLocation();
 
-  const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
+  const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   const navigation = [
     { name: 'Home', href: '/' },
