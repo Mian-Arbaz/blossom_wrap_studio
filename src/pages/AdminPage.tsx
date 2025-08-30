@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Package, Users, MessageSquare, Plus, Edit, Trash2, 
-  Eye, EyeOff, Save, X, Upload, Clock, Star, 
-  TrendingDown, AlertTriangle, BarChart3, ShoppingCart,
-  Minus, PlusIcon, Mail
+  Save, X, BarChart3, ShoppingCart, Minus, PlusIcon, 
+  Mail, AlertTriangle, TrendingDown
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
+import { useNotification } from '../contexts/NotificationContext';
 import { 
   getProducts, addProduct, updateProduct, deleteProduct, 
   categories, Product, getInventoryStats, updateInventory
@@ -14,7 +14,10 @@ import {
 
 const AdminPage: React.FC = () => {
   const { isAdmin, user } = useAuth();
+  const { addNotification } = useNotification();
   const navigate = useNavigate();
+  
+  // State management
   const [activeTab, setActiveTab] = useState<'products' | 'users' | 'messages' | 'inventory' | 'newsletter'>('products');
   const [products, setProducts] = useState<Product[]>([]);
   const [users, setUsers] = useState<any[]>([]);
@@ -41,24 +44,40 @@ const AdminPage: React.FC = () => {
     }
   });
 
+  // Redirect non-admin users
   useEffect(() => {
     if (!isAdmin) {
       navigate('/');
       return;
     }
-
-    // Load data
-    const loadedProducts = getProducts();
-    setProducts(loadedProducts);
-    setUsers(JSON.parse(localStorage.getItem('users') || '[]'));
-    setMessages(JSON.parse(localStorage.getItem('contactMessages') || '[]'));
-    setSubscribers(JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]'));
-    setInventoryStats(getInventoryStats());
   }, [isAdmin, navigate]);
 
-  const handleAddProduct = () => {
-    setIsAddingProduct(true);
-    setEditingProduct(null);
+  // Load data on component mount
+  useEffect(() => {
+    if (isAdmin) {
+      loadAllData();
+    }
+  }, [isAdmin]);
+
+  const loadAllData = () => {
+    try {
+      const loadedProducts = getProducts();
+      setProducts(loadedProducts);
+      setUsers(JSON.parse(localStorage.getItem('users') || '[]'));
+      setMessages(JSON.parse(localStorage.getItem('contactMessages') || '[]'));
+      setSubscribers(JSON.parse(localStorage.getItem('newsletter_subscribers') || '[]'));
+      setInventoryStats(getInventoryStats());
+    } catch (error) {
+      console.error('Error loading admin data:', error);
+      addNotification({
+        type: 'error',
+        title: 'Data Loading Error',
+        message: 'Failed to load admin data. Please refresh the page.'
+      });
+    }
+  };
+
+  const resetProductForm = () => {
     setProductForm({
       name: '',
       category: 'handmade-flowers',
@@ -74,6 +93,12 @@ const AdminPage: React.FC = () => {
         lowStockThreshold: 5
       }
     });
+  };
+
+  const handleAddProduct = () => {
+    setIsAddingProduct(true);
+    setEditingProduct(null);
+    resetProductForm();
     setIsEditModalOpen(true);
   };
 
@@ -98,68 +123,150 @@ const AdminPage: React.FC = () => {
     setIsEditModalOpen(true);
   };
 
+  const validateProductForm = (): boolean => {
+    if (!productForm.name.trim()) {
+      addNotification({
+        type: 'error',
+        title: 'Validation Error',
+        message: 'Product name is required.'
+      });
+      return false;
+    }
+
+    if (!productForm.description.trim()) {
+      addNotification({
+        type: 'error',
+        title: 'Validation Error',
+        message: 'Product description is required.'
+      });
+      return false;
+    }
+
+    if (productForm.price <= 0) {
+      addNotification({
+        type: 'error',
+        title: 'Validation Error',
+        message: 'Product price must be greater than 0.'
+      });
+      return false;
+    }
+
+    if (productForm.inventory.total < 0 || productForm.inventory.remaining < 0) {
+      addNotification({
+        type: 'error',
+        title: 'Validation Error',
+        message: 'Inventory values cannot be negative.'
+      });
+      return false;
+    }
+
+    if (productForm.inventory.remaining > productForm.inventory.total) {
+      addNotification({
+        type: 'error',
+        title: 'Validation Error',
+        message: 'Remaining stock cannot exceed total stock.'
+      });
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSaveProduct = () => {
-    if (!productForm.name || !productForm.description || productForm.price <= 0) {
-      alert('Please fill in all required fields');
+    if (!validateProductForm()) {
       return;
     }
 
-    const productData = {
-      ...productForm,
-      tags: productForm.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
-    };
+    try {
+      const productData = {
+        ...productForm,
+        tags: productForm.tags.split(',').map(tag => tag.trim()).filter(tag => tag)
+      };
 
-    if (isAddingProduct) {
-      addProduct(productData);
-    } else if (editingProduct) {
-      updateProduct(editingProduct.id, productData);
+      if (isAddingProduct) {
+        addProduct(productData);
+        addNotification({
+          type: 'success',
+          title: 'Product Added',
+          message: `${productForm.name} has been added successfully.`
+        });
+      } else if (editingProduct) {
+        updateProduct(editingProduct.id, productData);
+        addNotification({
+          type: 'success',
+          title: 'Product Updated',
+          message: `${productForm.name} has been updated successfully.`
+        });
+      }
+
+      // Refresh data
+      loadAllData();
+      setIsEditModalOpen(false);
+      setEditingProduct(null);
+    } catch (error) {
+      console.error('Error saving product:', error);
+      addNotification({
+        type: 'error',
+        title: 'Save Error',
+        message: 'Failed to save product. Please try again.'
+      });
     }
-
-    const updatedProducts = getProducts();
-    setProducts(updatedProducts);
-    setInventoryStats(getInventoryStats());
-    setIsEditModalOpen(false);
-    setEditingProduct(null);
   };
 
-  const handleDeleteProduct = (id: string) => {
-    if (window.confirm('Are you sure you want to delete this product?')) {
-      deleteProduct(id);
-      const updatedProducts = getProducts();
-      setProducts(updatedProducts);
-      setInventoryStats(getInventoryStats());
+  const handleDeleteProduct = (id: string, name: string) => {
+    if (window.confirm(`Are you sure you want to delete "${name}"? This action cannot be undone.`)) {
+      try {
+        deleteProduct(id);
+        loadAllData();
+        addNotification({
+          type: 'success',
+          title: 'Product Deleted',
+          message: `${name} has been deleted successfully.`
+        });
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        addNotification({
+          type: 'error',
+          title: 'Delete Error',
+          message: 'Failed to delete product. Please try again.'
+        });
+      }
     }
   };
 
   const handleInventoryUpdate = (productId: string, change: number) => {
     const product = products.find(p => p.id === productId);
-    if (product && product.inventory) {
-      const newRemaining = Math.max(0, Math.min(product.inventory.total, product.inventory.remaining + change));
-      updateInventory(productId, newRemaining);
-      const updatedProducts = getProducts();
-      setProducts(updatedProducts);
-      setInventoryStats(getInventoryStats());
+    if (!product?.inventory) {
+      addNotification({
+        type: 'error',
+        title: 'Inventory Error',
+        message: 'Product inventory data not found.'
+      });
+      return;
     }
-  };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      // In a real app, you would upload to Cloudinary or similar service
-      // For demo purposes, we'll use a placeholder
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setProductForm({
-          ...productForm,
-          image: e.target?.result as string
-        });
-      };
-      reader.readAsDataURL(file);
+    const newRemaining = Math.max(0, Math.min(product.inventory.total, product.inventory.remaining + change));
+    
+    try {
+      updateInventory(productId, newRemaining);
+      loadAllData();
+      addNotification({
+        type: 'success',
+        title: 'Inventory Updated',
+        message: `Stock updated for ${product.name}.`
+      });
+    } catch (error) {
+      console.error('Error updating inventory:', error);
+      addNotification({
+        type: 'error',
+        title: 'Update Error',
+        message: 'Failed to update inventory. Please try again.'
+      });
     }
   };
 
   const getStockStatus = (product: Product) => {
-    if (!product.inventory) return { status: 'unknown', color: 'gray' };
+    if (!product.inventory) return { status: 'No Data', color: 'gray' };
     
     const { remaining, lowStockThreshold } = product.inventory;
     
@@ -168,6 +275,11 @@ const AdminPage: React.FC = () => {
     return { status: 'In Stock', color: 'green' };
   };
 
+  const getCategoryName = (categoryId: string) => {
+    return categories.find(c => c.id === categoryId)?.name || 'Unknown Category';
+  };
+
+  // Calculate stats
   const stats = {
     totalProducts: products.length,
     upcomingProducts: products.filter(p => p.isUpcoming).length,
@@ -177,6 +289,7 @@ const AdminPage: React.FC = () => {
     ...inventoryStats
   };
 
+  // Don't render if not admin
   if (!isAdmin) {
     return null;
   }
@@ -191,7 +304,7 @@ const AdminPage: React.FC = () => {
             <p className="text-gray-600">Welcome back, {user?.name}</p>
           </div>
           <div className="text-sm text-gray-500">
-            Last login: {new Date().toLocaleDateString()}
+            Last updated: {new Date().toLocaleString()}
           </div>
         </div>
       </div>
@@ -336,7 +449,7 @@ const AdminPage: React.FC = () => {
                             </td>
                             <td className="px-4 py-3">
                               <span className="text-sm text-gray-600">
-                                {categories.find(c => c.id === product.category)?.name}
+                                {getCategoryName(product.category)}
                               </span>
                             </td>
                             <td className="px-4 py-3">
@@ -350,7 +463,7 @@ const AdminPage: React.FC = () => {
                                   {product.inventory?.remaining || 0} / {product.inventory?.total || 0}
                                 </div>
                                 <div className="text-gray-500">
-                                  {product.inventory ? 
+                                  {product.inventory && product.inventory.total > 0 ? 
                                     `${Math.round((product.inventory.remaining / product.inventory.total) * 100)}% remaining` 
                                     : 'No inventory data'
                                   }
@@ -384,13 +497,15 @@ const AdminPage: React.FC = () => {
                               <div className="flex items-center space-x-2">
                                 <button
                                   onClick={() => handleEditProduct(product)}
-                                  className="text-blue-600 hover:text-blue-800 transition-colors duration-300"
+                                  className="text-blue-600 hover:text-blue-800 transition-colors duration-300 p-1"
+                                  title="Edit product"
                                 >
                                   <Edit size={16} />
                                 </button>
                                 <button
-                                  onClick={() => handleDeleteProduct(product.id)}
-                                  className="text-red-600 hover:text-red-800 transition-colors duration-300"
+                                  onClick={() => handleDeleteProduct(product.id, product.name)}
+                                  className="text-red-600 hover:text-red-800 transition-colors duration-300 p-1"
+                                  title="Delete product"
                                 >
                                   <Trash2 size={16} />
                                 </button>
@@ -402,59 +517,11 @@ const AdminPage: React.FC = () => {
                     </tbody>
                   </table>
                 </div>
-              </div>
-            )}
 
-            {/* Newsletter Tab */}
-            {activeTab === 'newsletter' && (
-              <div>
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-semibold text-dark-gray">Newsletter Subscribers</h2>
-                  <div className="text-sm text-gray-600">
-                    Total: {subscribers.length} subscribers
-                  </div>
-                </div>
-
-                {subscribers.length === 0 ? (
+                {products.length === 0 && (
                   <div className="text-center py-8">
-                    <Mail size={48} className="text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500">No newsletter subscribers yet</p>
-                  </div>
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead className="bg-gray-50">
-                        <tr>
-                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Email</th>
-                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Subscribed Date</th>
-                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200">
-                        {subscribers.map((subscriber) => (
-                          <tr key={subscriber.id} className="hover:bg-gray-50">
-                            <td className="px-4 py-3">
-                              <div className="flex items-center space-x-2">
-                                <Mail size={16} className="text-gray-400" />
-                                <span className="font-medium text-dark-gray">{subscriber.email}</span>
-                              </div>
-                            </td>
-                            <td className="px-4 py-3 text-gray-600">
-                              {new Date(subscriber.subscribedAt).toLocaleDateString()}
-                            </td>
-                            <td className="px-4 py-3">
-                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                                subscriber.status === 'active' 
-                                  ? 'bg-green-100 text-green-800' 
-                                  : 'bg-gray-100 text-gray-800'
-                              }`}>
-                                {subscriber.status}
-                              </span>
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
+                    <Package size={48} className="text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-500">No products found. Add your first product to get started.</p>
                   </div>
                 )}
               </div>
@@ -571,7 +638,7 @@ const AdminPage: React.FC = () => {
                                   <div>
                                     <p className="font-medium text-dark-gray">{product.name}</p>
                                     <p className="text-sm text-gray-500">
-                                      {categories.find(c => c.id === product.category)?.name}
+                                      {getCategoryName(product.category)}
                                     </p>
                                   </div>
                                 </div>
@@ -616,6 +683,7 @@ const AdminPage: React.FC = () => {
                                     onClick={() => handleInventoryUpdate(product.id, -1)}
                                     disabled={inventory.remaining <= 0}
                                     className="p-1 rounded bg-red-100 text-red-600 hover:bg-red-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300"
+                                    title="Decrease stock"
                                   >
                                     <Minus size={14} />
                                   </button>
@@ -623,6 +691,7 @@ const AdminPage: React.FC = () => {
                                     onClick={() => handleInventoryUpdate(product.id, 1)}
                                     disabled={inventory.remaining >= inventory.total}
                                     className="p-1 rounded bg-green-100 text-green-600 hover:bg-green-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-300"
+                                    title="Increase stock"
                                   >
                                     <PlusIcon size={14} />
                                   </button>
@@ -674,6 +743,13 @@ const AdminPage: React.FC = () => {
                     </tbody>
                   </table>
                 </div>
+
+                {users.length === 0 && (
+                  <div className="text-center py-8">
+                    <Users size={48} className="text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-500">No registered users yet</p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -694,6 +770,9 @@ const AdminPage: React.FC = () => {
                           <div>
                             <h3 className="font-medium text-dark-gray">{message.name}</h3>
                             <p className="text-sm text-gray-600">{message.email}</p>
+                            {message.subject && (
+                              <p className="text-sm text-gray-500">Subject: {message.subject}</p>
+                            )}
                           </div>
                           <span className="text-xs text-gray-500">
                             {new Date(message.timestamp).toLocaleDateString()}
@@ -704,6 +783,61 @@ const AdminPage: React.FC = () => {
                     ))
                   )}
                 </div>
+              </div>
+            )}
+
+            {/* Newsletter Tab */}
+            {activeTab === 'newsletter' && (
+              <div>
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold text-dark-gray">Newsletter Subscribers</h2>
+                  <div className="text-sm text-gray-600">
+                    Total: {subscribers.length} subscribers
+                  </div>
+                </div>
+
+                {subscribers.length === 0 ? (
+                  <div className="text-center py-8">
+                    <Mail size={48} className="text-gray-400 mx-auto mb-4" />
+                    <p className="text-gray-500">No newsletter subscribers yet</p>
+                  </div>
+                ) : (
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Email</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Subscribed Date</th>
+                          <th className="px-4 py-3 text-left text-sm font-medium text-gray-700">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-200">
+                        {subscribers.map((subscriber) => (
+                          <tr key={subscriber.id} className="hover:bg-gray-50">
+                            <td className="px-4 py-3">
+                              <div className="flex items-center space-x-2">
+                                <Mail size={16} className="text-gray-400" />
+                                <span className="font-medium text-dark-gray">{subscriber.email}</span>
+                              </div>
+                            </td>
+                            <td className="px-4 py-3 text-gray-600">
+                              {new Date(subscriber.subscribedAt).toLocaleDateString()}
+                            </td>
+                            <td className="px-4 py-3">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                subscriber.status === 'active' 
+                                  ? 'bg-green-100 text-green-800' 
+                                  : 'bg-gray-100 text-gray-800'
+                              }`}>
+                                {subscriber.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -788,6 +922,26 @@ const AdminPage: React.FC = () => {
 
               <div>
                 <label className="block text-sm font-medium text-dark-gray mb-2">
+                  Image URL
+                </label>
+                <input
+                  type="url"
+                  value={productForm.image}
+                  onChange={(e) => setProductForm({ ...productForm, image: e.target.value })}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-light-pink focus:border-transparent"
+                  placeholder="Enter image URL"
+                />
+                {productForm.image && (
+                  <img
+                    src={productForm.image}
+                    alt="Preview"
+                    className="w-32 h-32 object-cover rounded-lg border border-gray-300 mt-2"
+                  />
+                )}
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-dark-gray mb-2">
                   Tags (comma separated)
                 </label>
                 <input
@@ -865,34 +1019,6 @@ const AdminPage: React.FC = () => {
                       min="0"
                     />
                   </div>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-dark-gray mb-2">
-                  Product Image
-                </label>
-                <div className="space-y-3">
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-light-pink focus:border-transparent"
-                  />
-                  <input
-                    type="url"
-                    value={productForm.image}
-                    onChange={(e) => setProductForm({ ...productForm, image: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-light-pink focus:border-transparent"
-                    placeholder="Or enter image URL"
-                  />
-                  {productForm.image && (
-                    <img
-                      src={productForm.image}
-                      alt="Preview"
-                      className="w-32 h-32 object-cover rounded-lg border border-gray-300"
-                    />
-                  )}
                 </div>
               </div>
 
