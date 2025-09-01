@@ -13,7 +13,7 @@ export const Header: React.FC = () => {
   const { user, logout } = useAuth();
   const location = useLocation();
 
-  const itemCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+  const itemCount = cartItems ? cartItems.reduce((sum, item) => sum + item.quantity, 0) : 0;
 
   const navigation = [
     { name: 'Home', href: '/' },
@@ -133,7 +133,7 @@ export const Header: React.FC = () => {
         {/* Search Bar */}
         {isSearchOpen && (
           <div className="py-4 border-t border-gray-200 dark:border-gray-700">
-            <SearchBar onClose={() => setIsSearchOpen(false)} />
+            <SearchBar isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
           </div>
         )}
 
